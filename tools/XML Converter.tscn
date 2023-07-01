@@ -99,6 +99,12 @@ file_mode = 0
 filters = PackedStringArray("*.png ; Spritesheets", "*.jpg ; Spritesheets", "*.jpeg ; Spritesheets", "*.xml ; XML Spritesheet Data")
 show_hidden_files = true
 
+[node name="Label" type="Label" parent="."]
+offset_top = 694.0
+offset_right = 290.0
+offset_bottom = 720.0
+text = "Taken from swordcube's Nova Engine, only used for the purpose of converting XMLs."
+
 [connection signal="pressed" from="Main Panel/Choose Sprites" to="Main Panel/Choose Sprites" method="popup_shit"]
 [connection signal="text_changed" from="Main Panel/FPS" to="Main Panel" method="set_fps"]
 [connection signal="toggled" from="Main Panel/Looped Checkbox" to="Main Panel" method="set_looped"]
