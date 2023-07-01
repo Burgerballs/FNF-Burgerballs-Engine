@@ -72,6 +72,8 @@ func _ready():
 	doThing(curSong)
 	Conductor.songPos -= Conductor.crotchet*4
 	ratingSpr.modulate.a = 0
+	Icons.find_child('BFIcon').texture = load("res://assets/images/characters/"+boyfriend.charName+'/icon.png')
+	Icons.find_child('DADIcon').texture = load("res://assets/images/characters/"+dad.charName+'/icon.png')
 func findStage(a):
 	match a:
 		_:
@@ -129,6 +131,7 @@ func startSong():
 	Conductor.linkStream(Inst)
 	startedSong = true
 var camSpeed = 1
+@onready var Icons = $"CamHUD/HealthBar/Icons"
 func _process(delta):
 	accuracy = (totalLooseHits / totalHitNotes)
 	if !(totalLooseHits == 0):
@@ -142,7 +145,22 @@ func _process(delta):
 	elif health <= 0:
 		kill()
 		health = 0
+		
+	Icons.position.x = (-health+2) * ($"CamHUD/HealthBar/HealthBarBar (lol)".size.x / 2) + $"CamHUD/HealthBar/HealthBarBar (lol)".position.x
+	
 	$"CamHUD/HealthBar/HealthBarBar (lol)".value = -health + 2
+	
+	if (-health+2)*50 <= 20:
+		Icons.find_child("BFIcon").find_child("AnimationPlayer").play('live')
+		Icons.find_child("DADIcon").find_child("AnimationPlayer").play('kill')
+	elif (-health+2)*50 >= 80:
+		Icons.find_child("DADIcon").find_child("AnimationPlayer").play('live')
+		Icons.find_child("BFIcon").find_child("AnimationPlayer").play('kill')
+	else:
+		Icons.find_child("DADIcon").find_child("AnimationPlayer").play('live')
+		Icons.find_child("BFIcon").find_child("AnimationPlayer").play('live')
+		
+	
 	for note in noteGroup.get_children():
 		if note.tooLate && note.mustHit && !note.canBeHit:
 			miss(note)
@@ -231,6 +249,10 @@ func beatHit(cr):
 		syncSong()
 	dad._dance()
 	boyfriend._dance()
+	Icons.scale = Vector2(1.1,1.1)
+	var tween1 = create_tween()
+	tween1.tween_property(Icons, "scale", Vector2(1,1), Conductor.crotchet/6000)
+	
 
 func syncSong():
 	if (Inst != null):

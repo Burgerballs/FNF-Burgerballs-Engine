@@ -23,6 +23,7 @@ func _process(delta):
 		crotchet = ((60/bpm)*1000)
 		stepCrotchet = crotchet/4
 	oldStep = curStep
+	oldBeat = curBeat
 	updateStep()
 	if oldStep != curStep && curStep > 0: stepHit.emit(curStep)
 	if oldBeat != curBeat && curBeat > 0: beatHit.emit(curBeat)

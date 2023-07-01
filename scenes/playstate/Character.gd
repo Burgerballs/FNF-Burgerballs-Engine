@@ -56,6 +56,7 @@ func _loadChar(charName = 'bf', isBf = false):
 		flip_h = !flip_h
 	if !FileAccess.file_exists("res://assets/images/characters/"+charName+'/'+charName+'.res'):
 		set_sprite_frames(load("res://assets/images/characters/dad/dad.res"))
+		self.charName = 'dad'
 	else:
 		set_sprite_frames(load("res://assets/images/characters/"+charName+'/'+charName+'.res'))
 	position+=charData.position
