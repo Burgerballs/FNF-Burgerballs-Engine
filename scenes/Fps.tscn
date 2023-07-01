@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://eeseefksm1gr"]
+
+[ext_resource type="Script" path="res://scenes/Fps.gd" id="1_gv8oc"]
+
+[node name="Fps" type="Label"]
+process_priority = -50
+top_level = true
+text = "ggg"
+script = ExtResource("1_gv8oc")

@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://dkc78o5xt0g1p"]
+
+[ext_resource type="Script" path="res://objects/noteShit/Strumline.gd" id="1_h6mic"]
+[ext_resource type="PackedScene" uid="uid://b8uttyasrma1c" path="res://objects/noteShit/Receptor.tscn" id="2_jjgj0"]
+
+[node name="Strumline" type="Node2D"]
+scale = Vector2(0.9, 0.9)
+script = ExtResource("1_h6mic")
+metadata/controls = ["left", "down", "up", "right"]
+
+[node name="1" parent="." instance=ExtResource("2_jjgj0")]
+scale = Vector2(0.7, 0.7)
+
+[node name="2" parent="." instance=ExtResource("2_jjgj0")]
+position = Vector2(112, 0)
+scale = Vector2(0.7, 0.7)
+metadata/direction = "down"
+
+[node name="3" parent="." instance=ExtResource("2_jjgj0")]
+position = Vector2(224, 0)
+scale = Vector2(0.7, 0.7)
+metadata/direction = "up"
+
+[node name="4" parent="." instance=ExtResource("2_jjgj0")]
+position = Vector2(336, 0)
+scale = Vector2(0.7, 0.7)
+metadata/direction = "right"

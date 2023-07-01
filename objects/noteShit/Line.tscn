@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://co6j2826fq0jl"]
+
+[ext_resource type="Texture2D" uid="uid://b118hns23moeo" path="res://assets/purple hold0000.png" id="1_w5lvi"]
+
+[sub_resource type="GDScript" id="GDScript_bhe0f"]
+script/source = "extends Line2D
+class_name Line
+var dir = 0
+var pos = 0.0
+var parent:Note
+var strumLine:StrumLine
+var length = 0.0
+func _init(parent:Note):
+	dir = parent.dir
+	strumLine = parent.strumLine
+	self.parent = parent
+	texture = load(\"res://assets/\"+parent.dirNames[dir]+\" hold0000.png\")
+	width = 30
+	length = parent.holdLength
+"
+
+[node name="Line" type="Line2D"]
+points = PackedVector2Array(0, 0, 0, -200)
+width = 30.0
+texture = ExtResource("1_w5lvi")
+texture_mode = 1
+sharp_limit = 0.5
+script = SubResource("GDScript_bhe0f")

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c60qj14j2wrcr"]
+
+[ext_resource type="Script" path="res://scenes/StrumTest.gd" id="1_6jesm"]
+[ext_resource type="PackedScene" uid="uid://dkc78o5xt0g1p" path="res://objects/noteShit/Strumline.tscn" id="1_aiscb"]
+
+[node name="StrumTest" type="Node2D"]
+script = ExtResource("1_6jesm")
+
+[node name="Strumline" parent="." instance=ExtResource("1_aiscb")]
+position = Vector2(100, 620)
+scale = Vector2(1, 1)
+
+[node name="Strumline2" parent="." instance=ExtResource("1_aiscb")]
+position = Vector2(800, 620)
+scale = Vector2(1, 1)
