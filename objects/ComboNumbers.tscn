@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://c5o3m8otmbcdl"]
-
-[ext_resource type="Script" path="res://objects/ComboNumbers.gd" id="1_usx1p"]
-
-[node name="ComboNumbers" type="Node2D"]
-script = ExtResource("1_usx1p")

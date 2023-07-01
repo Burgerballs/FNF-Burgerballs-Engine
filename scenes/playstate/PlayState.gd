@@ -9,6 +9,7 @@ extends Node2D
 @onready var boyfriend = $"BF"
 @onready var dad = $"DAD"
 @onready var sound = $"/root/Globals/SoundStream"
+@onready var ratingSpr = $"CamHUD/RatingSpr"
 var SONG = Song.new();
 var difficulty = 'Normal'
 var speed = 1.0
@@ -70,6 +71,7 @@ func _ready():
 	dad._loadChar(SONG.player_2)
 	doThing(curSong)
 	Conductor.songPos -= Conductor.crotchet*4
+	ratingSpr.modulate.a = 0
 func findStage(a):
 	match a:
 		_:
@@ -236,8 +238,6 @@ func syncSong():
 			Voices.seek(Inst.get_playback_position())
 func opponentNote(note):
 	pass
-func dispCombo():
-	var comboNum = ComboNumbers.new(combo)
 func goodNoteHit(note):
 	if !note.wasGoodHit:
 		var diff = absf(Conductor.songPos - note.pos)
@@ -249,14 +249,27 @@ func goodNoteHit(note):
 		note.wasGoodHit = true
 		Voices.volume_db = 0
 		combo+=1
-		dispCombo()
+@onready var ComboShits = $"CamHUD/RatingSpr/ComboShits"
+@onready var wtffff = [ComboShits.find_child('c1000'),ComboShits.find_child('c100'),ComboShits.find_child('c10'),ComboShits.find_child('c1')]
 func resolveRatings(diff):
 	for i in judgements:
 		if i.accNeed >= diff:
 			totalLooseHits += i.accWorth
 			score += i.scoreGiven
-			print(i.name)
+			dispCombo(i)
 			break
+			
+func dispCombo(e_ = null):
+	if e_:
+		ratingSpr.self_modulate.a = 1
+		ratingSpr.texture = load("res://assets/images/ratings/" + e_.name.to_lower() + '.png')
+	else:
+		ratingSpr.self_modulate.a = 0
+	ratingSpr.find_child("AnimationPlayer").stop()
+	ratingSpr.find_child("AnimationPlayer").play('Show')
+	for i in wtffff.size():
+		wtffff[i].texture = load("res://assets/images/combo/num" + str(int(combo / pow(10,i)) % 10) + '.png')
+	
 func key_from_event(event):
 	#from swordcube's nova engine !
 	var data:int = -1

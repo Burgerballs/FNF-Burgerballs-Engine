@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://g607at54b8k2"]
+[gd_scene load_steps=22 format=3 uid="uid://g607at54b8k2"]
 
 [ext_resource type="Script" path="res://scenes/playstate/PlayState.gd" id="1_eywoe"]
 [ext_resource type="PackedScene" uid="uid://dkc78o5xt0g1p" path="res://objects/noteShit/Strumline.tscn" id="2_16luq"]
@@ -7,7 +7,9 @@
 [ext_resource type="FontFile" uid="uid://cmisj8l6ni57l" path="res://assets/fonts/vcr.ttf" id="5_82f0k"]
 [ext_resource type="Theme" uid="uid://cnnfjplhfl3ld" path="res://assets/bar-theme.tres" id="6_exjub"]
 [ext_resource type="Texture2D" uid="uid://bncs1h5y8i3gd" path="res://healthBar.png" id="7_e5u3m"]
+[ext_resource type="Texture2D" uid="uid://ct1njnxa1rq1d" path="res://assets/images/ratings/sick.png" id="8_ktx53"]
 [ext_resource type="Script" path="res://scenes/playstate/Character.gd" id="8_r7dtf"]
+[ext_resource type="Texture2D" uid="uid://bjakkka2w8bjk" path="res://assets/images/combo/num0.png" id="9_0swri"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_66gyo"]
 bg_color = Color(0, 0, 0, 0.6)
@@ -70,6 +72,150 @@ border_color = Color(0, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spa2o"]
 bg_color = Color(1, 0, 0, 1)
 border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_7ms1h"]
+resource_name = "Show"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1120, -0.25, 0, 0.25, 0, 1120, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.1)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(80, -0.25, 0, 0.25, 0, 74, -0.25, 0, 0.1, 0),
+"times": PackedFloat32Array(0, 0.0368)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:modulate:r")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:modulate:g")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:modulate:b")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:modulate:a")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.0005, 0.4)
+}
+
+[sub_resource type="Animation" id="Animation_kbfcg"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1120, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(80, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:modulate:r")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:modulate:g")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:modulate:b")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:modulate:a")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_aaxaa"]
+_data = {
+"RESET": SubResource("Animation_kbfcg"),
+"Show": SubResource("Animation_7ms1h")
+}
 
 [node name="PlayState" type="Node2D"]
 script = ExtResource("1_eywoe")
@@ -180,6 +326,40 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_spa2o")
 max_value = 2.0
 value = 1.0
 show_percentage = false
+
+[node name="RatingSpr" type="Sprite2D" parent="CamHUD"]
+position = Vector2(1120, 80)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("8_ktx53")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CamHUD/RatingSpr"]
+libraries = {
+"": SubResource("AnimationLibrary_aaxaa")
+}
+
+[node name="ComboShits" type="Node2D" parent="CamHUD/RatingSpr"]
+position = Vector2(-1866.67, -133.333)
+scale = Vector2(1.66667, 1.66667)
+
+[node name="c1" type="Sprite2D" parent="CamHUD/RatingSpr/ComboShits"]
+position = Vector2(1044.8, 140.8)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("9_0swri")
+
+[node name="c10" type="Sprite2D" parent="CamHUD/RatingSpr/ComboShits"]
+position = Vector2(1084.8, 140.8)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("9_0swri")
+
+[node name="c100" type="Sprite2D" parent="CamHUD/RatingSpr/ComboShits"]
+position = Vector2(1124.8, 140.8)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("9_0swri")
+
+[node name="c1000" type="Sprite2D" parent="CamHUD/RatingSpr/ComboShits"]
+position = Vector2(1163.8, 140.8)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("9_0swri")
 
 [node name="InstStream" type="AudioStreamPlayer" parent="."]
 
