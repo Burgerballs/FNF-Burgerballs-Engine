@@ -1,0 +1,106 @@
+[gd_scene load_steps=13 format=3 uid="uid://drl0ufqgoxjur"]
+
+[ext_resource type="Texture2D" uid="uid://cnj1y2ubtd3h3" path="res://assets/images/menus/menuBG.png" id="1_ogp8w"]
+[ext_resource type="Script" path="res://scenes/mainmenu/MainMenuState.gd" id="1_rrenc"]
+[ext_resource type="SpriteFrames" uid="uid://u48wiou773et" path="res://assets/images/menus/main/menu_story_mode.res" id="2_fus5m"]
+[ext_resource type="Texture2D" uid="uid://3phhfvxo1siw" path="res://assets/images/menus/menuBGMagenta.png" id="3_7ss8p"]
+[ext_resource type="SpriteFrames" uid="uid://dfufw1kms2dg2" path="res://assets/images/menus/main/menu_freeplay.res" id="3_js01j"]
+[ext_resource type="SpriteFrames" uid="uid://bqnk26ubbe0mh" path="res://assets/images/menus/main/menu_options.res" id="4_j6u70"]
+[ext_resource type="FontFile" uid="uid://cmisj8l6ni57l" path="res://assets/fonts/vcr.ttf" id="5_qm7kj"]
+
+[sub_resource type="Animation" id="Animation_x2mnt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_mvl6k"]
+resource_name = "flicker"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [true, false, true, false, true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_niblw"]
+_data = {
+"RESET": SubResource("Animation_x2mnt"),
+"flicker": SubResource("Animation_mvl6k")
+}
+
+[sub_resource type="FontVariation" id="FontVariation_yhofr"]
+base_font = ExtResource("5_qm7kj")
+
+[sub_resource type="LabelSettings" id="LabelSettings_gb8ch"]
+font = SubResource("FontVariation_yhofr")
+font_size = 15
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[node name="MainMenuState" type="Node2D"]
+script = ExtResource("1_rrenc")
+
+[node name="MenuBg" type="Sprite2D" parent="."]
+position = Vector2(640, 360)
+texture = ExtResource("1_ogp8w")
+
+[node name="Magenta" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(640, 360)
+texture = ExtResource("3_7ss8p")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Magenta"]
+libraries = {
+"": SubResource("AnimationLibrary_niblw")
+}
+
+[node name="Options" type="Node2D" parent="."]
+visible = false
+
+[node name="story_mode" type="AnimatedSprite2D" parent="Options"]
+position = Vector2(640, 150)
+sprite_frames = ExtResource("2_fus5m")
+animation = &"story_mode white"
+
+[node name="freeplay" type="AnimatedSprite2D" parent="Options"]
+position = Vector2(640, 350)
+sprite_frames = ExtResource("3_js01j")
+animation = &"freeplay white"
+
+[node name="options" type="AnimatedSprite2D" parent="Options"]
+position = Vector2(640, 550)
+sprite_frames = ExtResource("4_j6u70")
+animation = &"options white"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 3.0
+offset_top = 686.0
+offset_right = 393.0
+offset_bottom = 720.0
+text = "Burgerballs Engine ALPHA 0.1.0
+All assets belong to the Funkin' Crew"
+label_settings = SubResource("LabelSettings_gb8ch")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Options")
+libraries = {
+"": SubResource("AnimationLibrary_niblw")
+}

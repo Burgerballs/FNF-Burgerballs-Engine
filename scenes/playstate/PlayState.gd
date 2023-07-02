@@ -272,16 +272,17 @@ func goodNoteHit(note):
 		Voices.volume_db = 0
 		combo+=1
 @onready var ComboShits = $"CamHUD/RatingSpr/ComboShits"
+@onready var DiffLabel = $"CamHUD/RatingSpr/Label"
 @onready var wtffff = [ComboShits.find_child('c1000'),ComboShits.find_child('c100'),ComboShits.find_child('c10'),ComboShits.find_child('c1')]
 func resolveRatings(diff):
 	for i in judgements:
 		if i.accNeed >= diff:
 			totalLooseHits += i.accWorth
 			score += i.scoreGiven
-			dispCombo(i)
+			dispCombo(i, diff)
 			break
 			
-func dispCombo(e_ = null):
+func dispCombo(e_ = null, diff_=null):
 	if e_:
 		ratingSpr.self_modulate.a = 1
 		ratingSpr.texture = load("res://assets/images/ratings/" + e_.name.to_lower() + '.png')
@@ -291,6 +292,15 @@ func dispCombo(e_ = null):
 	ratingSpr.find_child("AnimationPlayer").play('Show')
 	for i in wtffff.size():
 		wtffff[i].texture = load("res://assets/images/combo/num" + str(int(combo / pow(10,i)) % 10) + '.png')
+		if combo == 0:
+			wtffff[i].modulate = Color("be0027")
+		else:
+			wtffff[i].modulate = Color("ffffff")
+	if diff_:
+		DiffLabel.visible = true
+		DiffLabel.text = str(floor(diff_)) + 'ms'
+	else:
+		DiffLabel.visible = false
 	
 func key_from_event(event):
 	#from swordcube's nova engine !

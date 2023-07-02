@@ -13,6 +13,7 @@ var safeZoneOffset:float = 10.0 / 60.0 * 1000
 
 signal beatHit(beat:int)
 signal stepHit(step:int)
+signal songLoaded(songName:String)
 
 var AttatchedStream:AudioStreamPlayer
 func linkStream(stream:AudioStreamPlayer):
@@ -31,9 +32,11 @@ func _process(delta):
 func updateStep():
 	curStep = floor(songPos / stepCrotchet)
 	curBeat = floor(curStep / 4)
-func playMusic(path:String, stream:AudioStreamPlayer):
+func playMusic(path:String, stream:AudioStreamPlayer, loop = false, showSongCredit = false):
 	path = "res://assets/"+path+".ogg"
 	stream.stop()
 	stream.stream = load(path)
-	stream.stream.loop = false
+	stream.stream.loop = loop
 	stream.play(0.0)
+	if showSongCredit:
+		songLoaded.emit(path.split('/')[path.split('/').size()-1].replace('.ogg', ''))

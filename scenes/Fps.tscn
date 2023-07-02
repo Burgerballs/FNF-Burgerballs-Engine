@@ -1,9 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://eeseefksm1gr"]
+[gd_scene load_steps=4 format=3 uid="uid://eeseefksm1gr"]
 
+[ext_resource type="FontFile" uid="uid://cmisj8l6ni57l" path="res://assets/fonts/vcr.ttf" id="1_a2rs4"]
 [ext_resource type="Script" path="res://scenes/Fps.gd" id="1_gv8oc"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_3p0gf"]
+font = ExtResource("1_a2rs4")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
 
 [node name="Fps" type="Label"]
 process_priority = -50
 top_level = true
-text = "ggg"
+offset_left = 2.0
+offset_right = 31.0
+offset_bottom = 18.0
+text = "FPS: 1000000000
+MEM: gay sex"
+label_settings = SubResource("LabelSettings_3p0gf")
 script = ExtResource("1_gv8oc")

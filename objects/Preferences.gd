@@ -1,6 +1,9 @@
 extends Node
 var defaultSave:Dictionary = {
 	"downscroll": false,
+	"controls": {
+		"left": 'left'
+	}
 }
 var playerSave:Dictionary = {}
 var playerSaveFile

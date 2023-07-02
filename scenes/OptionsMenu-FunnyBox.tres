@@ -1,0 +1,106 @@
+[gd_resource type="VisualShader" load_steps=9 format=3 uid="uid://v3155mst2o5"]
+
+[ext_resource type="Script" path="res://addons/shaderV/rgba/generate_shapes/chekerboardPattern.gd" id="1_wcnw8"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_exsk3"]
+default_input_values = [0, 0.0, 1, 0.7]
+
+[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_x7txh"]
+default_input_values = [1, Vector3(10, 10, 0), 2, Vector3(0.7, 0.7, 0.5), 3, 0.2]
+initialized = true
+script = ExtResource("1_wcnw8")
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_cym2s"]
+input_name = "screen_uv"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_lwtqq"]
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_rjscx"]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_4whqi"]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_d3b3v"]
+default_input_values = [0, 0.0, 1, 17.0]
+operator = 3
+
+[resource]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+
+
+// CheckerboardShape
+float _checkerboardPatternFunc(vec2 uv, vec2 _checker_size){
+	float fmodRes = mod(floor(_checker_size.x * uv.x) + floor(_checker_size.y * uv.y), 2.0);
+	return max(sign(fmodRes), 0.0);
+}
+
+void fragment() {
+// Input:3
+	vec2 n_out3p0 = SCREEN_UV;
+
+
+// Input:6
+	float n_out6p0 = TIME;
+
+
+// FloatOp:9
+	float n_in9p1 = 17.00000;
+	float n_out9p0 = n_out6p0 / n_in9p1;
+
+
+// VectorCompose:7
+	float n_in7p1 = 0.00000;
+	vec2 n_out7p0 = vec2(n_out9p0, n_in7p1);
+
+
+// VectorOp:5
+	vec2 n_out5p0 = n_out3p0 + n_out7p0;
+
+
+	vec3 n_out2p0;
+	float n_out2p1;
+// CheckerboardShape:2
+	vec3 n_in2p1 = vec3(10.00000, 10.00000, 0.00000);
+	vec3 n_in2p2 = vec3(0.70000, 0.70000, 0.50000);
+	float n_in2p3 = 0.20000;
+	{
+		n_out2p0 = n_in2p2;
+		n_out2p1 = _checkerboardPatternFunc(vec3(n_out5p0, 0.0).xy, n_in2p1.xy) * n_in2p3;
+	}
+
+
+// FloatOp:10
+	float n_in10p1 = 0.70000;
+	float n_out10p0 = n_out2p1 + n_in10p1;
+
+
+// Output:0
+	COLOR.a = n_out10p0;
+
+
+}
+"
+graph_offset = Vector2(-96.0638, 64.6379)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(640, 140)
+nodes/fragment/2/node = SubResource("VisualShaderNodeCustom_x7txh")
+nodes/fragment/2/position = Vector2(80, 140)
+nodes/fragment/3/node = SubResource("VisualShaderNodeInput_cym2s")
+nodes/fragment/3/position = Vector2(-420, 80)
+nodes/fragment/5/node = SubResource("VisualShaderNodeVectorOp_lwtqq")
+nodes/fragment/5/position = Vector2(-100, 140)
+nodes/fragment/6/node = SubResource("VisualShaderNodeInput_rjscx")
+nodes/fragment/6/position = Vector2(-680, 180)
+nodes/fragment/7/node = SubResource("VisualShaderNodeVectorCompose_4whqi")
+nodes/fragment/7/position = Vector2(-300, 160)
+nodes/fragment/9/node = SubResource("VisualShaderNodeFloatOp_d3b3v")
+nodes/fragment/9/position = Vector2(-420, 280)
+nodes/fragment/10/node = SubResource("VisualShaderNodeFloatOp_exsk3")
+nodes/fragment/10/position = Vector2(400, 160)
+nodes/fragment/connections = PackedInt32Array(3, 0, 5, 0, 5, 0, 2, 0, 7, 0, 5, 1, 6, 0, 9, 0, 9, 0, 7, 0, 2, 1, 10, 0, 10, 0, 0, 1)

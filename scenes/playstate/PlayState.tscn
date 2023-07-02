@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://g607at54b8k2"]
+[gd_scene load_steps=24 format=3 uid="uid://g607at54b8k2"]
 
 [ext_resource type="Script" path="res://scenes/playstate/PlayState.gd" id="1_eywoe"]
 [ext_resource type="PackedScene" uid="uid://dkc78o5xt0g1p" path="res://objects/noteShit/Strumline.tscn" id="2_16luq"]
@@ -218,6 +218,13 @@ _data = {
 "Show": SubResource("Animation_7ms1h")
 }
 
+[sub_resource type="LabelSettings" id="LabelSettings_h5hxu"]
+font = ExtResource("5_82f0k")
+font_size = 32
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+
 [node name="PlayState" type="Node2D"]
 script = ExtResource("1_eywoe")
 
@@ -286,6 +293,7 @@ label_settings = SubResource("LabelSettings_cfpbh")
 horizontal_alignment = 1
 
 [node name="NoteGroup" type="Node2D" parent="CamHUD"]
+z_index = 1
 script = ExtResource("4_qoe8d")
 
 [node name="SongProgress" type="ProgressBar" parent="CamHUD"]
@@ -338,7 +346,10 @@ position = Vector2(60, 0)
 flip_h = true
 
 [node name="RatingSpr" type="Sprite2D" parent="CamHUD"]
+process_priority = -2
 modulate = Color(1, 1, 1, 0)
+z_index = -1
+texture_filter = 2
 position = Vector2(1120, 80)
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("8_ktx53")
@@ -371,6 +382,15 @@ texture = ExtResource("9_0swri")
 position = Vector2(1163.8, 140.8)
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("9_0swri")
+
+[node name="Label" type="Label" parent="CamHUD/RatingSpr"]
+offset_left = -61.6666
+offset_top = 136.667
+offset_right = 14.3334
+offset_bottom = 168.667
+text = "5 MS"
+label_settings = SubResource("LabelSettings_h5hxu")
+horizontal_alignment = 1
 
 [node name="InstStream" type="AudioStreamPlayer" parent="."]
 
