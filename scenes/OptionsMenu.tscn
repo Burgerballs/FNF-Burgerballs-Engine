@@ -34,19 +34,11 @@ position = Vector2(640, 360)
 texture = ExtResource("1_fi0eh")
 
 [node name="magenta" type="Sprite2D" parent="."]
-visible = false
 texture_filter = 1
 texture_repeat = 1
 material = SubResource("ShaderMaterial_v32h4")
 position = Vector2(640, 360)
 texture = ExtResource("4_xwbin")
-
-[node name="ColorRect" type="ColorRect" parent="."]
-visible = false
-texture_filter = 1
-material = SubResource("ShaderMaterial_7rui1")
-theme = ExtResource("2_yo2qo")
-color = Color(0, 0, 0, 0.8)
 
 [node name="Container" type="Panel" parent="."]
 offset_left = 5.0
@@ -54,6 +46,16 @@ offset_top = 75.0
 offset_right = 1275.0
 offset_bottom = 645.0
 theme = ExtResource("2_yo2qo")
+
+[node name="ColorRect3" type="ColorRect" parent="Container"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_7rui1")
+offset_left = -5.0
+offset_top = -75.0
+offset_right = -5.0
+offset_bottom = -75.0
+theme = ExtResource("2_yo2qo")
+color = Color(0, 0, 0, 0.8)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Container"]
 layout_mode = 0
@@ -81,17 +83,46 @@ layout_mode = 0
 offset_left = 249.0
 offset_top = 5.0
 offset_right = 1265.0
-offset_bottom = 565.0
+offset_bottom = 485.0
 theme = ExtResource("2_yo2qo")
+
+[node name="OptionL" type="HBoxContainer" parent="Container"]
+layout_mode = 0
+offset_left = 249.0
+offset_top = 492.0
+offset_right = 1265.0
+offset_bottom = 541.0
+theme = ExtResource("2_yo2qo")
+theme_override_constants/separation = 64
+alignment = 1
 
 [node name="Label" type="Label" parent="Container"]
 layout_mode = 0
 offset_left = 3.0
-offset_top = 531.0
+offset_top = 516.0
 offset_right = 171.0
-offset_bottom = 565.0
+offset_bottom = 550.0
 text = "UP/DOWN TO NAVIGATE
-ENTER TO SELECT"
+ENTER TO SELECT
+BACKSPACE TO GO BACK"
+label_settings = SubResource("LabelSettings_fy3vq")
+
+[node name="ColorRect2" type="ColorRect" parent="Container"]
+visible = false
+texture_filter = 1
+material = SubResource("ShaderMaterial_7rui1")
+layout_mode = 0
+offset_left = 249.0
+offset_top = 546.0
+offset_right = 1265.0
+offset_bottom = 563.0
+theme = ExtResource("2_yo2qo")
+color = Color(0, 0, 0, 0.8)
+
+[node name="Magic" type="Label" parent="Container/ColorRect2"]
+layout_mode = 0
+offset_right = 176.0
+offset_bottom = 17.0
 label_settings = SubResource("LabelSettings_fy3vq")
 
 [node name="ColorRect" type="ColorRect" parent="Container"]

@@ -3,13 +3,16 @@ extends Node2D
 var optionTexts:Array
 var optionTexts2:Array
 @onready var options = $"Container/Options"
+@onready var optionl = $"Container/OptionL"
 @onready var optionsbar = $"Container/VBoxContainer"
+@onready var descLabel = $"Container/ColorRect2/Magic"
+@onready var descLabelBG = $"Container/ColorRect2"
 var sideBarState = true
 
 var fuck:Dictionary = {
 	'gameplay' = [
-		['DOWNSCROLL', 'downscroll', 'bool'],
-		['OFFSET', 'offset', 'offset']
+		['DOWNSCROLL', 'downscroll', 'bool', 'Notes scroll down if activated.'],
+		['OFFSET', 'offset', 'offset', 'Note positions are incremented by the amount given by you.']
 	],
 	'controls' = [
 		['LEFT', 'left', 'control']
@@ -23,12 +26,12 @@ func _ready():
 	coolBoxSizeThing(optionsbar)
 
 func coolBoxSizeThing(box):
-	var thing = $ColorRect
+	var thing = $"Container/ColorRect3"
 	var boxproperties = [box.global_position, box.size]
 	var postween = create_tween()
 	postween.set_ease(Tween.EASE_IN_OUT)
 	postween.set_trans(Tween.TRANS_QUAD)
-	postween.tween_property(thing, 'position', boxproperties[0], 0.4)
+	postween.tween_property(thing, 'global_position', boxproperties[0], 0.4)
 	var sizeween = create_tween()
 	sizeween.set_ease(Tween.EASE_IN_OUT)
 	sizeween.set_trans(Tween.TRANS_QUAD)
@@ -49,12 +52,17 @@ func _process(delta):
 			sideBarState = false
 			changeSel(0)
 			coolBoxSizeThing(options)
+			optionl.visible = true
+			descLabelBG.visible = true
 	elif Input.is_action_just_pressed('uiback'):
 		if !sideBarState:
 			sideBarState = true
 			for i in optionTexts2.size():
 				optionTexts2[i].modulate.a = 1
+				descLabelBG.visible = false
 			coolBoxSizeThing(optionsbar)
+			optionl.visible = false
+var curOptionSel
 var curSelOption = 0
 func changeSel(fucker):
 	curSelOption += fucker
@@ -65,10 +73,25 @@ func changeSel(fucker):
 	for i in optionTexts2.size():
 		if i == curSelOption && optionTexts2[i] != null:
 			optionTexts2[i].modulate.a = 1
+			curOptionSel = fuck[optionTexts[curSel].name][curSelOption]
+			drawOptionThing(curOptionSel)
 		elif optionTexts2[i] != null:
 			optionTexts2[i].modulate.a = 0.5
 			
-
+func drawOptionThing(option):
+	for i in optionl.get_children():
+		optionl.remove_child(i)
+		i.free()
+	if option[2] == 'bool':
+		var trueLabel = Label.new()
+		trueLabel.text = '> '+str(Preferences.getPreference(option[1]))+' <'
+		trueLabel.label_settings = optionTexts[curSel].label_settings
+		trueLabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		optionl.add_child(trueLabel)
+	if option.size() != 3:
+		descLabel.text = option[3]
+	else:
+		descLabel.text = 'No description given or needed.'
 var curSel = 0
 func changeSelSideBar(fucker):
 	curSel += fucker
