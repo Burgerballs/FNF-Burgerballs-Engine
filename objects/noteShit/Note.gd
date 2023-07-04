@@ -50,6 +50,7 @@ func reloadSprites():
 		
 var downscrollMult = -1
 func _process(d):
+	downscrollMult = (1 if !Preferences.getPreference('downscroll') else -1)
 	if mustHit:
 		canBeHit = (absf(Conductor.songPos - pos) <= (Conductor.safeZoneOffset))
 		tooLate = (pos < Conductor.songPos - Conductor.safeZoneOffset && !wasGoodHit)

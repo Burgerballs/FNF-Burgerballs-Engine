@@ -12,7 +12,11 @@ var sideBarState = true
 var fuck:Dictionary = {
 	'gameplay' = [
 		['DOWNSCROLL', 'downscroll', 'bool', 'Notes scroll down if activated.'],
-		['OFFSET', 'offset', 'offset', 'Note positions are incremented by the amount given by you.']
+		['OFFSET', 'offset', 'float', 'Note positions are incremented by the amount given by you. (Positive amounts = later)', [1,-100,100]]
+	],
+	'graphics' = [
+		['FPS LIMIT', 'fps', 'float', 'No description given or needed.', [1, 60, 300]],
+		['MULTITHREADED RENDERING', 'multithreading', 'bool']
 	],
 	'controls' = [
 		['LEFT', 'left', 'control']
@@ -47,9 +51,16 @@ func _process(delta):
 			changeSelSideBar(1)
 		else:
 			changeSel(1)
+	elif Input.is_action_just_pressed('uileft'):
+		if !sideBarState:
+			modifySetting(-1)
+	elif Input.is_action_just_pressed('uiright'):
+		if !sideBarState:
+			modifySetting(1)
 	elif Input.is_action_just_pressed('uienter'):
 		if sideBarState:
 			sideBarState = false
+			curSelOption = 0
 			changeSel(0)
 			coolBoxSizeThing(options)
 			optionl.visible = true
@@ -62,6 +73,24 @@ func _process(delta):
 				descLabelBG.visible = false
 			coolBoxSizeThing(optionsbar)
 			optionl.visible = false
+			
+func modifySetting(num):
+	match curOptionSel[2]:
+		"bool":
+			Preferences.setPreference(curOptionSel[1], !Preferences.getPreference(curOptionSel[1]))
+		"float":
+			var prefNum = Preferences.getPreference(curOptionSel[1])
+			prefNum += (num * curOptionSel[4][0]*(5 if Input.is_key_pressed(KEY_SHIFT) else 1))
+			if prefNum > curOptionSel[4][2]:
+				
+				prefNum = curOptionSel[4][2]
+			elif prefNum < curOptionSel[4][1]:
+				prefNum = curOptionSel[4][1]
+			Preferences.setPreference(curOptionSel[1],prefNum)
+	Preferences.actUpon()
+	drawOptionThing()
+	Preferences.saveData()
+	
 var curOptionSel
 var curSelOption = 0
 func changeSel(fucker):
@@ -74,24 +103,38 @@ func changeSel(fucker):
 		if i == curSelOption && optionTexts2[i] != null:
 			optionTexts2[i].modulate.a = 1
 			curOptionSel = fuck[optionTexts[curSel].name][curSelOption]
-			drawOptionThing(curOptionSel)
+			drawOptionThing()
 		elif optionTexts2[i] != null:
 			optionTexts2[i].modulate.a = 0.5
 			
-func drawOptionThing(option):
+func drawOptionThing():
 	for i in optionl.get_children():
 		optionl.remove_child(i)
 		i.free()
-	if option[2] == 'bool':
+	if curOptionSel[2] == 'bool':
 		var trueLabel = Label.new()
-		trueLabel.text = '> '+str(Preferences.getPreference(option[1]))+' <'
+		trueLabel.text = '> '+str(Preferences.getPreference(curOptionSel[1]))+' <'
 		trueLabel.label_settings = optionTexts[curSel].label_settings
 		trueLabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		optionl.add_child(trueLabel)
-	if option.size() != 3:
-		descLabel.text = option[3]
+	if curOptionSel[2] == 'float':
+		var trueLabel = Label.new()
+		trueLabel.text = '> '+str(Preferences.getPreference(curOptionSel[1]))+getOptionMeasure()+' <'
+		trueLabel.label_settings = optionTexts[curSel].label_settings
+		trueLabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		optionl.add_child(trueLabel)
+	if curOptionSel.size() != 3:
+		descLabel.text = curOptionSel[3]
 	else:
 		descLabel.text = 'No description given or needed.'
+func getOptionMeasure():
+	match curOptionSel[0]:
+		'OFFSET':
+			return 'ms'
+		'FPS LIMIT':
+			return ' FPS'
+		_:
+			return ''
 var curSel = 0
 func changeSelSideBar(fucker):
 	curSel += fucker

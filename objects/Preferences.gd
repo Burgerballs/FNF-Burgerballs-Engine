@@ -2,22 +2,38 @@ extends Node
 var defaultSave:Dictionary = {
 	"downscroll": false,
 	"offset": 0,
+	"multithreading": false,
+	"fps": 60,
 	"controls": {
 		"left": 'left'
 	}
 }
-var playerSave:Dictionary = {}
 var playerSaveFile
-var jsonInstance:JSON = JSON.new() # WHYYYYYYYY
 func _ready():
-	if FileAccess.file_exists("user://Preferences.json"):
-		playerSaveFile = FileAccess.open("user://Preferences.json", FileAccess.READ)
-		playerSave = JSON.parse_string(playerSaveFile.get_as_text())
+	var json:Dictionary = {}
+	
+	if not FileAccess.file_exists("user://Preferences.json"):
+		playerSaveFile = FileAccess.open("user://Preferences.json", FileAccess.WRITE)
+		playerSaveFile.store_string('{}')
 	else:
-		playerSave = defaultSave
+		playerSaveFile = FileAccess.open("user://Preferences.json", FileAccess.READ_WRITE)
+		json = JSON.parse_string(playerSaveFile.get_as_text())
 		saveData()
+	for key in defaultSave:
+		if key in json:
+			defaultSave[key] = json[key]
+		else:
+			json[key] = defaultSave[key]
+	saveData()
+	actUpon()
+	
+func actUpon():
+	Engine.max_fps = getPreference("fps")
+	ProjectSettings.set_setting('rendering/driver/threads/threadmodel', 'Multi-Threaded' if getPreference('multithreading') else "single-safe")
 func saveData():
 	var file = FileAccess.open("user://Preferences.json", FileAccess.WRITE)
-	file.store_string(JSON.stringify(playerSave))
-func getPreference(string): return playerSave[string]
-func setPreference(str, thing): playerSave[str] = thing
+	file.store_string(JSON.stringify(defaultSave))
+func getPreference(string): return defaultSave[string]
+func setPreference(str, thing): 
+	defaultSave[str] = thing
+	saveData()

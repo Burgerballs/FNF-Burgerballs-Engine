@@ -44,12 +44,13 @@ texture = ExtResource("4_xwbin")
 offset_left = 5.0
 offset_top = 75.0
 offset_right = 1275.0
-offset_bottom = 645.0
+offset_bottom = 715.0
 theme = ExtResource("2_yo2qo")
 
 [node name="ColorRect3" type="ColorRect" parent="Container"]
 texture_filter = 1
 material = SubResource("ShaderMaterial_7rui1")
+layout_mode = 0
 offset_left = -5.0
 offset_top = -75.0
 offset_right = -5.0
@@ -69,6 +70,12 @@ theme = ExtResource("2_yo2qo")
 layout_mode = 2
 text = "GAMEPLAY
 "
+label_settings = SubResource("LabelSettings_mtmnx")
+horizontal_alignment = 1
+
+[node name="graphics" type="Label" parent="Container/VBoxContainer"]
+layout_mode = 2
+text = "GRAPHICS"
 label_settings = SubResource("LabelSettings_mtmnx")
 horizontal_alignment = 1
 
@@ -98,10 +105,10 @@ alignment = 1
 
 [node name="Label" type="Label" parent="Container"]
 layout_mode = 0
-offset_left = 3.0
-offset_top = 516.0
-offset_right = 171.0
-offset_bottom = 550.0
+offset_left = 5.0
+offset_top = 584.0
+offset_right = 181.0
+offset_bottom = 635.0
 text = "UP/DOWN TO NAVIGATE
 ENTER TO SELECT
 BACKSPACE TO GO BACK"
@@ -130,4 +137,11 @@ layout_mode = 0
 offset_left = 240.0
 offset_right = 244.0
 offset_bottom = 570.0
+color = Color(1, 1, 1, 0.360784)
+
+[node name="ColorRect4" type="ColorRect" parent="Container"]
+layout_mode = 0
+offset_top = 570.0
+offset_right = 1270.0
+offset_bottom = 574.0
 color = Color(1, 1, 1, 0.360784)

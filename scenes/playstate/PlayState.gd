@@ -15,6 +15,8 @@ var difficulty = 'Normal'
 var speed = 1.0
 var curSong:String
 var camFollow:Vector2
+var defaultCamZoom = 1.0
+var camZooming = true
 class Rating extends Node2D:
 	var accWorth = 1.0
 	var accNeed = 45.0
@@ -74,6 +76,9 @@ func _ready():
 	ratingSpr.modulate.a = 0
 	Icons.find_child('BFIcon').texture = load("res://assets/images/characters/"+boyfriend.charName+'/icon.png')
 	Icons.find_child('DADIcon').texture = load("res://assets/images/characters/"+dad.charName+'/icon.png')
+	if Preferences.getPreference('downscroll'):
+		playerStrums.position.y = 620
+		dadStrums.position.y = 620
 func findStage(a):
 	match a:
 		_:
@@ -173,10 +178,16 @@ func _process(delta):
 		Conductor.songPos += delta*1000
 		isCurSecBF = SONG.notes[0].mustHitSection
 	var lerpVal:float = CoolUtil.boundTo(delta * 2.4 * camSpeed, 0, 1)
+	if camZooming:
+		$Camera2D.zoom = lerp($Camera2D.zoom, Vector2(defaultCamZoom,defaultCamZoom), lerpVal)
+		$CamHUD.scale = lerp($Camera2D.zoom, Vector2.ONE, lerpVal)
 	$Camera2D.position = Vector2(lerp($Camera2D.position.x, camFollow.x, lerpVal), lerp($Camera2D.position.y, camFollow.y, lerpVal))
 	moveCam()
+	positionHud()
 	
 
+func positionHud():
+	$CamHUD.offset = ($CamHUD.scale - Vector2(1.0,1.0)) * -(Vector2(1280,720)/Vector2(2.0,2.0))
 func moveCam():
 	if isCurSecBF:
 		camFollow = boyfriend.position + boyfriend.cameraPos
@@ -226,7 +237,7 @@ func generateSong():
 			if sec.notes.find(notes) == 0 && SONG.notes.find(sec) == 0:
 				prevNote = null
 			var NoteDir = notes.NoteDir
-			var StrumTime = notes.StrumTime
+			var StrumTime = notes.StrumTime + Preferences.getPreference('offset')
 			var PlayedByBf = notes.playedByBf
 			var suslength = notes.susLength
 			var newNote:Note = Note.new(StrumTime,NoteDir,PlayedByBf)
@@ -244,9 +255,13 @@ func generateSong():
 		curSong = SONG.songName
 		$"CamHUD/SongDisplay".text = SONG.songName.to_upper() + '\n[' + difficulty.to_upper() + ']'
 
+var camBumping = false
 func beatHit(cr):
 	if SONG.needsVoices:
 		syncSong()
+	if camBumping and cr % 4 == 0:
+		$Camera2D.zoom += Vector2(0.015,0.015)
+		$CamHUD.scale += Vector2(0.03,0.03)
 	dad._dance()
 	boyfriend._dance()
 	Icons.scale = Vector2(1.1,1.1)
@@ -259,6 +274,8 @@ func syncSong():
 		if ((Inst.get_playback_position() - Voices.get_playback_position()) * 1000) >= 20:
 			Voices.seek(Inst.get_playback_position())
 func opponentNote(note):
+	if !camBumping:
+		camBumping = true
 	pass
 func goodNoteHit(note):
 	if !note.wasGoodHit:
