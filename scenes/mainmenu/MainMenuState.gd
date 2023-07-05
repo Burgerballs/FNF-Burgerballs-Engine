@@ -21,6 +21,12 @@ func changeSel(fuck):
 			optionSprs[i].play(optionSprs[i].name+' white')
 		else:
 			optionSprs[i].play(optionSprs[i].name+' basic')
+func goTo():
+	match (optionSprs[curSel].name):
+		'options':
+			Globals.switchTo('OptionsMenu')
+		_:
+			print('notFound')
 func _process(delta):
 	if Input.is_action_just_pressed('uiup') && !alreadyEntered:
 		changeSel(-1)
@@ -38,4 +44,7 @@ func _process(delta):
 				tween.set_ease(Tween.EASE_OUT)
 				tween.set_trans(Tween.TRANS_QUAD)
 				tween.tween_property(optionSprs[i], "modulate:a", 0.0,0.4)
-	
+		var timer = Timer.new()
+		add_child(timer)
+		timer.connect('timeout', goTo)
+		timer.start(0.45)

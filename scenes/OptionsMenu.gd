@@ -2,6 +2,8 @@ extends Node2D
 
 var optionTexts:Array
 var optionTexts2:Array
+var controlyet = true # for doing it inside of menus
+var isNotMenu = false
 @onready var options = $"Container/Options"
 @onready var optionl = $"Container/OptionL"
 @onready var optionsbar = $"Container/VBoxContainer"
@@ -56,7 +58,7 @@ func coolBoxSizeThing(box):
 	sizeween.tween_property(thing, 'size', boxproperties[1], 0.4)
 var waitTime = 0
 func _process(delta):
-	if waitTime <= 0:
+	if waitTime <= 0 && controlyet == true:
 		if Input.is_action_just_pressed('uiup') && keybindlayer.visible == false:
 			if sideBarState:
 				changeSelSideBar(-1)
