@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c53tfjhaqsykt"]
+[gd_scene load_steps=17 format=3 uid="uid://c53tfjhaqsykt"]
 
 [ext_resource type="Texture2D" uid="uid://0cxpvhkuiph0" path="res://assets/images/menus/menuBGBlue.png" id="1_fi0eh"]
 [ext_resource type="Script" path="res://scenes/OptionsMenu.gd" id="1_qgxv7"]
@@ -7,9 +7,26 @@
 [ext_resource type="FontFile" uid="uid://cmisj8l6ni57l" path="res://assets/fonts/vcr.ttf" id="3_aettq"]
 [ext_resource type="Shader" uid="uid://v3155mst2o5" path="res://scenes/OptionsMenu-FunnyBox.tres" id="3_flv0v"]
 [ext_resource type="Texture2D" uid="uid://3phhfvxo1siw" path="res://assets/images/menus/menuBGMagenta.png" id="4_xwbin"]
+[ext_resource type="Material" uid="uid://d3g7wr3gx3box" path="res://assets/shader/Spiral.tres" id="8_h2oei"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v32h4"]
 shader = ExtResource("3_1r7cy")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0mk88"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 15
+shadow_color = Color(0, 0, 0, 0)
+
+[sub_resource type="Theme" id="Theme_5xu4j"]
+BoxContainer/constants/separation = 4
+Panel/styles/panel = SubResource("StyleBoxFlat_0mk88")
+VBoxContainer/constants/separation = 5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7rui1"]
 shader = ExtResource("3_flv0v")
@@ -23,6 +40,19 @@ shadow_size = 0
 [sub_resource type="LabelSettings" id="LabelSettings_fy3vq"]
 font = ExtResource("3_aettq")
 font_size = 15
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dvmix"]
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 15
+
+[sub_resource type="LabelSettings" id="LabelSettings_r63xw"]
+font = ExtResource("3_aettq")
+font_size = 48
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
@@ -45,7 +75,7 @@ offset_left = 5.0
 offset_top = 75.0
 offset_right = 1275.0
 offset_bottom = 715.0
-theme = ExtResource("2_yo2qo")
+theme = SubResource("Theme_5xu4j")
 
 [node name="ColorRect3" type="ColorRect" parent="Container"]
 texture_filter = 1
@@ -145,3 +175,33 @@ offset_top = 570.0
 offset_right = 1270.0
 offset_bottom = 574.0
 color = Color(1, 1, 1, 0.360784)
+
+[node name="KEYBINDLAYER" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Panel" type="Panel" parent="KEYBINDLAYER"]
+material = ExtResource("8_h2oei")
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 1275.0
+offset_bottom = 715.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_dvmix")
+
+[node name="Label" type="Label" parent="KEYBINDLAYER/Panel"]
+layout_mode = 0
+offset_right = 1275.0
+offset_bottom = 138.0
+text = "PRESS ANY KEY TO SET KEYBINDS
+(IF YOU TRY TO COPY THE KEYBIND FOR \"ACCEPT\", YOUR INPUT WILL BE IGNORED)"
+label_settings = SubResource("LabelSettings_r63xw")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Setting" type="Label" parent="KEYBINDLAYER/Panel"]
+layout_mode = 0
+offset_top = 355.0
+offset_right = 1270.0
+offset_bottom = 401.0
+text = "> D <"
+label_settings = SubResource("LabelSettings_r63xw")
+horizontal_alignment = 1

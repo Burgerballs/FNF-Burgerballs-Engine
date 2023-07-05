@@ -7,6 +7,8 @@ var optionTexts2:Array
 @onready var optionsbar = $"Container/VBoxContainer"
 @onready var descLabel = $"Container/ColorRect2/Magic"
 @onready var descLabelBG = $"Container/ColorRect2"
+@onready var keybindlayer = $"KEYBINDLAYER"
+@onready var keybindpanel = $"KEYBINDLAYER/Panel/Setting"
 var sideBarState = true
 
 var fuck:Dictionary = {
@@ -19,7 +21,19 @@ var fuck:Dictionary = {
 		['MULTITHREADED RENDERING', 'multithreading', 'bool']
 	],
 	'controls' = [
-		['LEFT', 'left', 'control']
+		['LEFT', 'left', 'control'],
+		['DOWN', 'down', 'control'],
+		['UP', 'up', 'control'],
+		['RIGHT', 'right', 'control'],
+		
+		['UI LEFT', 'uileft', 'control'],
+		['UI RIGHT', 'uiright', 'control'],
+
+		['UI UP', 'uiup', 'control'],
+		['UI DOWN', 'uidown', 'control'],
+		
+		['ACCEPT', 'uienter', 'control'],
+		['BACK', 'uiback', 'control']
 	]
 }
 
@@ -40,40 +54,59 @@ func coolBoxSizeThing(box):
 	sizeween.set_ease(Tween.EASE_IN_OUT)
 	sizeween.set_trans(Tween.TRANS_QUAD)
 	sizeween.tween_property(thing, 'size', boxproperties[1], 0.4)
+var waitTime = 0
 func _process(delta):
-	if Input.is_action_just_pressed('uiup'):
-		if sideBarState:
-			changeSelSideBar(-1)
-		else:
-			changeSel(-1)
-	elif Input.is_action_just_pressed('uidown'):
-		if sideBarState:
-			changeSelSideBar(1)
-		else:
-			changeSel(1)
-	elif Input.is_action_just_pressed('uileft'):
-		if !sideBarState:
-			modifySetting(-1)
-	elif Input.is_action_just_pressed('uiright'):
-		if !sideBarState:
-			modifySetting(1)
-	elif Input.is_action_just_pressed('uienter'):
-		if sideBarState:
-			sideBarState = false
-			curSelOption = 0
-			changeSel(0)
-			coolBoxSizeThing(options)
-			optionl.visible = true
-			descLabelBG.visible = true
-	elif Input.is_action_just_pressed('uiback'):
-		if !sideBarState:
-			sideBarState = true
-			for i in optionTexts2.size():
-				optionTexts2[i].modulate.a = 1
-				descLabelBG.visible = false
-			coolBoxSizeThing(optionsbar)
-			optionl.visible = false
-			
+	if waitTime <= 0:
+		if Input.is_action_just_pressed('uiup') && keybindlayer.visible == false:
+			if sideBarState:
+				changeSelSideBar(-1)
+			else:
+				changeSel(-1)
+		elif Input.is_action_just_pressed('uidown') && keybindlayer.visible == false:
+			if sideBarState:
+				changeSelSideBar(1)
+			else:
+				changeSel(1)
+		elif Input.is_action_just_pressed('uileft'):
+			if !sideBarState && keybindlayer.visible == false:
+				modifySetting(-1)
+		elif Input.is_action_just_pressed('uiright'):
+			if !sideBarState && keybindlayer.visible == false:
+				modifySetting(1)
+		elif Input.is_action_just_pressed('uienter'):
+			if sideBarState && keybindlayer.visible == false:
+				sideBarState = false
+				curSelOption = 0
+				changeSel(0)
+				coolBoxSizeThing(options)
+				optionl.visible = true
+				descLabelBG.visible = true
+			elif curOptionSel[2] == 'control' && keybindlayer.visible == false:
+				controlTim()
+		elif Input.is_action_just_pressed('uiback'):
+			if !sideBarState && keybindlayer.visible == false:
+				sideBarState = true
+				for i in optionTexts2.size():
+					optionTexts2[i].modulate.a = 1
+					descLabelBG.visible = false
+				coolBoxSizeThing(optionsbar)
+				optionl.visible = false
+	if waitTime > 0:
+		waitTime -= delta
+func _input(event):
+	if keybindlayer.visible == true && event.is_pressed() && event is InputEventKey:
+		var key = OS.get_keycode_string(event.keycode)
+		if (curOptionSel[1] == 'uienter') or (curOptionSel[1] != 'uienter' && !Input.is_action_just_pressed('uienter')):
+			Preferences.setControl(curOptionSel[1], key)
+			waitTime = 0.1
+			print(key)
+			keybindlayer.visible = false
+		drawOptionThing()
+		Preferences.actUpon()
+func controlTim():
+	keybindlayer.visible = true
+	keybindpanel.text = '> '+Preferences.getControl(curOptionSel[1]).to_upper()+' <'
+	pass
 func modifySetting(num):
 	match curOptionSel[2]:
 		"bool":
@@ -120,6 +153,22 @@ func drawOptionThing():
 	if curOptionSel[2] == 'float':
 		var trueLabel = Label.new()
 		trueLabel.text = '> '+str(Preferences.getPreference(curOptionSel[1]))+getOptionMeasure()+' <'
+		trueLabel.label_settings = optionTexts[curSel].label_settings
+		trueLabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		optionl.add_child(trueLabel)
+	if curOptionSel[2] == 'control':
+		var promptLabel = Label.new()
+		promptLabel.text = 'PRESS ENTER TO CHANGE BINDS'
+		promptLabel.label_settings = optionTexts[curSel].label_settings
+		promptLabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		optionl.add_child(promptLabel)
+		var divLabel = Label.new()
+		divLabel.text = ' // '
+		divLabel.label_settings = optionTexts[curSel].label_settings
+		divLabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		optionl.add_child(divLabel)
+		var trueLabel = Label.new()
+		trueLabel.text = str(Preferences.getControl(curOptionSel[1])).to_upper()
 		trueLabel.label_settings = optionTexts[curSel].label_settings
 		trueLabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		optionl.add_child(trueLabel)
