@@ -20,11 +20,14 @@ func findArtist(song):
 	return ret
 
 func switchTo(scenepath):
-	funnygradient.find_child("AnimationPlayer").play('godown')
-	funnygradient.find_child("AnimationPlayer").connect("animation_finished", func(animnam):
-		if animnam == 'godown':
-			get_tree().change_scene_to_file("res://scenes/"+scenepath+'.tscn')
-			funnygradient.find_child("AnimationPlayer").play('godowner'))
+	get_tree().paused = true
+	var animer = funnygradient.find_child("AnimationPlayer") # the animer,,,
+	animer.speed_scale = Preferences.getPreference('transitionspd')
+	animer.play('godown')
+	await get_tree().create_timer(animer.get_animation('godown').length).timeout
+	get_tree().change_scene_to_file("res://scenes/"+scenepath+'.tscn')
+	get_tree().paused = false
+	animer.play('godowner')
 func playSound(sex):
 	SoundStream.stream = load("res://assets/sfx/"+sex+".ogg")
 	SoundStream.play()

@@ -1,7 +1,6 @@
 # STOLEN FROM NOVA ENGINE LOL
 
 @tool
-@icon("res://editor/icons/alphabet.png")
 
 extends ReferenceRect
 

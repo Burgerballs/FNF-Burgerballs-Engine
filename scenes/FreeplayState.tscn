@@ -1,0 +1,102 @@
+[gd_scene load_steps=13 format=3 uid="uid://be8le8cgxsrqv"]
+
+[ext_resource type="Texture2D" uid="uid://bjdl0w4j5bowb" path="res://assets/images/menus/menuDesat.png" id="1_7hqd5"]
+[ext_resource type="Script" path="res://scenes/FreeplayState.gd" id="1_j0mgs"]
+[ext_resource type="FontFile" uid="uid://cmisj8l6ni57l" path="res://assets/fonts/vcr.ttf" id="2_yvggr"]
+[ext_resource type="Theme" uid="uid://b3l5cf3mqtujs" path="res://assets/opacityblack.tres" id="3_oh2i0"]
+[ext_resource type="Texture2D" uid="uid://cv3fupxsgm734" path="res://assets/weeks/week1/week.png" id="4_v8le5"]
+[ext_resource type="PackedScene" uid="uid://bgilym2qsrs4y" path="res://scenes/fonts/Alphabet.tscn" id="6_crtpq"]
+[ext_resource type="PackedScene" uid="uid://c4b1hqv1lfaxu" path="res://objects/HealthIcon.tscn" id="7_i0l2o"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ppb4u"]
+bg_color = Color(0, 0, 0, 0.6)
+
+[sub_resource type="LabelSettings" id="LabelSettings_eviot"]
+font = ExtResource("2_yvggr")
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_84n1j"]
+bg_color = Color(0, 0, 0, 0.6)
+
+[sub_resource type="LabelSettings" id="LabelSettings_fd7i1"]
+font = ExtResource("2_yvggr")
+font_size = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ssl00"]
+bg_color = Color(0, 0, 0, 0.6)
+
+[node name="FreeplayState" type="Node2D"]
+script = ExtResource("1_j0mgs")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(640, 360)
+texture = ExtResource("1_7hqd5")
+
+[node name="ScoreText" type="Panel" parent="."]
+offset_left = 1075.0
+offset_top = 5.0
+offset_right = 1275.0
+offset_bottom = 41.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ppb4u")
+
+[node name="Text" type="Label" parent="ScoreText"]
+layout_mode = 0
+offset_left = 5.0
+offset_right = 205.0
+offset_bottom = 36.0
+text = "SCORE: 50000
+ACCURACY: 100%"
+label_settings = SubResource("LabelSettings_eviot")
+
+[node name="WeekPanel" type="Panel" parent="."]
+offset_left = 990.0
+offset_top = 5.0
+offset_right = 1070.0
+offset_bottom = 41.0
+theme = ExtResource("3_oh2i0")
+theme_override_styles/panel = SubResource("StyleBoxFlat_84n1j")
+
+[node name="Week" type="Sprite2D" parent="WeekPanel"]
+position = Vector2(40.0625, 18)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("4_v8le5")
+
+[node name="Label" type="Label" parent="WeekPanel"]
+visible = false
+layout_mode = 0
+offset_right = 80.0
+offset_bottom = 36.0
+text = "NON-WEEK SONG"
+label_settings = SubResource("LabelSettings_fd7i1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="SongInfo" type="Panel" parent="."]
+offset_left = 990.0
+offset_top = 46.0
+offset_right = 1275.0
+offset_bottom = 118.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ssl00")
+
+[node name="Text" type="Label" parent="SongInfo"]
+layout_mode = 0
+offset_left = 5.0
+offset_right = 280.0
+offset_bottom = 72.0
+text = "SONG NAME: BOPEEBO
+DIFFICULTY: > HARD <
+SCROLL SPEED: 1.0
+MODIFIER MULTIPLIER: 1.0x"
+label_settings = SubResource("LabelSettings_eviot")
+horizontal_alignment = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="AlphabetTemplate" parent="." instance=ExtResource("6_crtpq")]
+visible = false
+
+[node name="IconTemplate" parent="." instance=ExtResource("7_i0l2o")]
+position = Vector2(76, -94)

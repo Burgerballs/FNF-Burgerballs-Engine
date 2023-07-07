@@ -16,11 +16,14 @@ var sideBarState = true
 var fuck:Dictionary = {
 	'gameplay' = [
 		['DOWNSCROLL', 'downscroll', 'bool', 'Notes scroll down if activated.'],
-		['OFFSET', 'offset', 'float', 'Note positions are incremented by the amount given by you. (Positive amounts = later)', [1,-100,100]]
+		['OFFSET', 'offset', 'float', 'Note positions are incremented by the amount given by you. (Positive amounts = later)', [1,-100,100]],
 	],
 	'graphics' = [
 		['FPS LIMIT', 'fps', 'float', 'No description given or needed.', [1, 60, 300]],
 		['MULTITHREADED RENDERING', 'multithreading', 'bool']
+	],
+	'preferences' = [
+		['TRANSITION SPEED', 'transitionspd', 'float', 'The animation that plays when you enter something will be increased in speed depending on the number you set.', [0.25,1,5]]
 	],
 	'controls' = [
 		['LEFT', 'left', 'control'],
@@ -93,6 +96,10 @@ func _process(delta):
 					descLabelBG.visible = false
 				coolBoxSizeThing(optionsbar)
 				optionl.visible = false
+			elif sideBarState && keybindlayer.visible == false:
+				if !isNotMenu:
+					waitTime = 1
+					Globals.switchTo('mainmenu/MainMenuState')
 	if waitTime > 0:
 		waitTime -= delta
 func _input(event):
@@ -184,6 +191,8 @@ func getOptionMeasure():
 			return 'ms'
 		'FPS LIMIT':
 			return ' FPS'
+		'TRANSITION SPEED':
+			return 'x'
 		_:
 			return ''
 var curSel = 0

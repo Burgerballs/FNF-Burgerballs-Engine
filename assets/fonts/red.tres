@@ -1,0 +1,8 @@
+[gd_resource type="RichTextEffect" load_steps=2 format=3 uid="uid://c4tsopglx4wn"]
+
+[sub_resource type="GDScript" id="GDScript_ylo4u"]
+script/source = "func _ready():
+	var bbcode = \"r\""
+
+[resource]
+script = SubResource("GDScript_ylo4u")

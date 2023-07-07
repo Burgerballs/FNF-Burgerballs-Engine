@@ -126,11 +126,13 @@ _data = {
 }
 
 [node name="Globals" type="CanvasLayer"]
+process_mode = 3
 process_priority = -100
 layer = 8
 script = ExtResource("1_abu0s")
 
 [node name="Fps" parent="." instance=ExtResource("1_xfbvu")]
+z_index = 7
 offset_right = 27.0
 offset_bottom = 26.0
 

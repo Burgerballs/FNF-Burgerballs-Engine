@@ -4,6 +4,7 @@ var defaultSave:Dictionary = {
 	"offset": 0,
 	"multithreading": false,
 	"fps": 60,
+	"transitionspd": 1.0,
 	"controls": {
 		"left": 'LEFT',
 		'down': 'DOWN',

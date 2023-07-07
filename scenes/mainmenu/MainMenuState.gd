@@ -23,8 +23,11 @@ func changeSel(fuck):
 			optionSprs[i].play(optionSprs[i].name+' basic')
 func goTo():
 	match (optionSprs[curSel].name):
+		'freeplay':
+			Globals.switchTo('FreeplayState')
 		'options':
 			Globals.switchTo('OptionsMenu')
+		
 		_:
 			print('notFound')
 func _process(delta):
