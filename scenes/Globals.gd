@@ -18,7 +18,7 @@ func findArtist(song):
 		if songArtist[i][0] == song:
 			ret = songArtist[i][1]
 	return ret
-
+var song:Song
 func switchTo(scenepath):
 	get_tree().paused = true
 	var animer = funnygradient.find_child("AnimationPlayer") # the animer,,,
@@ -26,6 +26,19 @@ func switchTo(scenepath):
 	animer.play('godown')
 	await get_tree().create_timer(animer.get_animation('godown').length).timeout
 	get_tree().change_scene_to_file("res://scenes/"+scenepath+'.tscn')
+	get_tree().paused = false
+	animer.play('godowner')
+func play_song(songname,diff):
+	BGMStream.stop()
+	get_tree().paused = true
+	song = Song.new()
+	print(songname)
+	song.parse_chart(songname, diff)
+	var animer = funnygradient.find_child("AnimationPlayer") # the animer,,,
+	animer.speed_scale = Preferences.getPreference('transitionspd')
+	animer.play('godown')
+	await get_tree().create_timer(animer.get_animation('godown').length).timeout
+	get_tree().change_scene_to_file("res://scenes/playstate/PlayState.tscn")
 	get_tree().paused = false
 	animer.play('godowner')
 func playSound(sex):

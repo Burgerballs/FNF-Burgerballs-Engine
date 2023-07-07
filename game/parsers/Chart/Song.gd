@@ -8,13 +8,16 @@ var notes:Array[Section]
 var player_2:String
 var player_1:String
 var needsVoices:bool = true
+var diff = 'NORMAl'
 
 func parse_chart(song,diff):
 	var filePath = "res://assets/songs/"+song+'/'+song
-	if diff != 'normal':
-		filePath += '-' + diff + '.json'
+	if diff != 'NORMAL':
+		filePath += '-' + diff.to_lower() + '.json'
 	else:
 		filePath += '.json'
+	self.diff = diff
+	print(filePath)
 	var file = FileAccess.open(filePath, FileAccess.READ)
 	var content = JSON.parse_string(file.get_as_text()).song
 	songName = content['song']

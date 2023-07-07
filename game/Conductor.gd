@@ -34,9 +34,10 @@ func updateStep():
 	curBeat = floor(curStep / 4)
 func playMusic(path:String, stream:AudioStreamPlayer, loop = false, showSongCredit = false):
 	path = "res://assets/"+path+".ogg"
-	stream.stop()
-	stream.stream = load(path)
-	stream.stream.loop = loop
-	stream.play(0.0)
-	if showSongCredit:
-		songLoaded.emit(path.split('/')[path.split('/').size()-1].replace('.ogg', ''))
+	if FileAccess.file_exists(path):
+		stream.stop()
+		stream.stream = load(path)
+		stream.stream.loop = loop
+		stream.play(0.0)
+		if showSongCredit:
+			songLoaded.emit(path.split('/')[path.split('/').size()-1].replace('.ogg', ''))

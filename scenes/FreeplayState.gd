@@ -39,9 +39,22 @@ func _process(delta):
 		changeSel(-1)
 	elif Input.is_action_just_pressed('uidown'):
 		changeSel(1)
+	elif Input.is_action_just_pressed('uileft'):
+		changeDiff(-1)
+	elif Input.is_action_just_pressed('uiright'):
+		changeDiff(1)
+	elif Input.is_action_just_pressed('ui_accept'):
+		Globals.play_song(songList[curSel].songName.to_lower().replace(' ', '-'),diffList[curDiff])
 	for i in IconLayer.get_children().size():
-		IconLayer.get_child(i).position.x = AlphabetLayer.get_child(i).position.x + AlphabetLayer.get_child(i).size.x + 50
-		IconLayer.get_child(i).position.y = AlphabetLayer.get_child(i).position.y
+		IconLayer.get_child(i).position.x = AlphabetLayer.get_child(i).position.x + AlphabetLayer.get_child(i).size.x + 60
+		IconLayer.get_child(i).position.y = AlphabetLayer.get_child(i).position.y + (AlphabetLayer.get_child(i).size.y / 2)
+func changeDiff(fucker):
+	curDiff += fucker
+	if curDiff > diffList.size()-1:
+		curDiff = 0
+	elif curDiff < 0:
+		curDiff = diffList.size()-1
+	$"SongInfo/Text".text = 'SONG NAME: ' + songList[curSel].songName.to_upper() + '\n['+diffList[curDiff]+']'
 func changeSel(fucker):
 	curSel += fucker
 	if curSel > songList.size()-1:
@@ -55,10 +68,15 @@ func changeSel(fucker):
 		else:
 			alphabet.modulate.a = 0.6
 		alphabet.target_y = i - curSel
-	$"SongInfo/Text".text = 'SONG NAME: ' + songList[curSel].songName.to_upper() + '\n\n['+diffList[curDiff]+']'
+	$"SongInfo/Text".text = 'SONG NAME: ' + songList[curSel].songName.to_upper() + '\n['+diffList[curDiff]+']'
+	var tweenr = create_tween()
+	tweenr.set_ease(Tween.EASE_OUT)
+	tweenr.set_trans(Tween.TRANS_QUAD)
+	tweenr.tween_property($bg, "modulate", songList[curSel].songColor, 0.2)
+
 
 func addSongsToList():
 	for weekName in weekpars.weekList:
 		for song in weekpars.loadedWeeks[weekName].songs:
-			var tempMeta = SongMetadata.new(song[0], "res://assets/images/characters/" + song[1] + '/icon.png', Color(song[2][0],song[2][1],song[2][2]), weekName)
+			var tempMeta = SongMetadata.new(song[0], "res://assets/images/characters/" + song[1] + '/icon.png', Color(song[2][0]/255,song[2][1]/255,song[2][2]/255, 1), weekName)
 			songList.append(tempMeta)

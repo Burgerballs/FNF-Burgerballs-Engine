@@ -59,8 +59,10 @@ var stages = {
 	"Default" = 'res://scenes/playstate/stages/Default.tscn'
 }
 var Stage
+var pauseMenu = preload("res://scenes/playstate/PauseMenu.tscn")
 func _ready():
-	SONG.parse_chart('south-erect', difficulty.to_lower())
+	Conductor.songPos = 0
+	SONG = Globals.song
 	Conductor.connect("beatHit", beatHit)
 	generateSong()
 	Stage = findStage(curSong).instantiate()
@@ -79,6 +81,10 @@ func _ready():
 	if Preferences.getPreference('downscroll'):
 		playerStrums.position.y = 620
 		dadStrums.position.y = 620
+	Inst.connect('finished', endSong)
+	defaultCamZoom = Stage.defaultCamZoom
+func endSong():
+	Globals.switchTo('mainmenu/MainMenuState')
 func findStage(a):
 	match a:
 		_:
@@ -131,7 +137,7 @@ func doCountDown():
 	)
 func startSong():
 	Conductor.playMusic('songs/' + str(curSong).to_lower().replace(' ', '-') + '/Inst', Inst)
-	if FileAccess.file_exists('res://assets/songs/' + str(curSong).to_lower().replace(' ', '-') + '/Voices'):
+	if SONG.needsVoices:
 		Conductor.playMusic('songs/' + str(curSong).to_lower().replace(' ', '-') + '/Voices', Voices)
 	Conductor.linkStream(Inst)
 	startedSong = true
@@ -180,12 +186,16 @@ func _process(delta):
 	var lerpVal:float = CoolUtil.boundTo(delta * 2.4 * camSpeed, 0, 1)
 	if camZooming:
 		$Camera2D.zoom = lerp($Camera2D.zoom, Vector2(defaultCamZoom,defaultCamZoom), lerpVal)
-		$CamHUD.scale = lerp($Camera2D.zoom, Vector2.ONE, lerpVal)
+		$CamHUD.scale = lerp($CamHUD.scale, Vector2.ONE, lerpVal)
 	$Camera2D.position = Vector2(lerp($Camera2D.position.x, camFollow.x, lerpVal), lerp($Camera2D.position.y, camFollow.y, lerpVal))
 	moveCam()
 	positionHud()
-	
+	if Input.is_action_just_pressed('ui_accept'):
+		pause()
 
+func pause():
+	var mnu = pauseMenu.instantiate()
+	self.add_child(mnu)
 func positionHud():
 	$CamHUD.offset = ($CamHUD.scale - Vector2(1.0,1.0)) * -(Vector2(1280,720)/Vector2(2.0,2.0))
 func moveCam():

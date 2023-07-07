@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://be8le8cgxsrqv"]
+[gd_scene load_steps=14 format=3 uid="uid://be8le8cgxsrqv"]
 
 [ext_resource type="Texture2D" uid="uid://bjdl0w4j5bowb" path="res://assets/images/menus/menuDesat.png" id="1_7hqd5"]
 [ext_resource type="Script" path="res://scenes/FreeplayState.gd" id="1_j0mgs"]
@@ -26,10 +26,16 @@ font_size = 15
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ssl00"]
 bg_color = Color(0, 0, 0, 0.6)
 
+[sub_resource type="LabelSettings" id="LabelSettings_luisy"]
+font = ExtResource("2_yvggr")
+font_size = 12
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+
 [node name="FreeplayState" type="Node2D"]
 script = ExtResource("1_j0mgs")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="bg" type="Sprite2D" parent="."]
 position = Vector2(640, 360)
 texture = ExtResource("1_7hqd5")
 
@@ -42,12 +48,12 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ppb4u")
 
 [node name="Text" type="Label" parent="ScoreText"]
 layout_mode = 0
-offset_left = 5.0
-offset_right = 205.0
+offset_right = 200.0
 offset_bottom = 36.0
 text = "SCORE: 50000
 ACCURACY: 100%"
 label_settings = SubResource("LabelSettings_eviot")
+horizontal_alignment = 1
 
 [node name="WeekPanel" type="Panel" parent="."]
 offset_left = 990.0
@@ -76,19 +82,29 @@ autowrap_mode = 2
 offset_left = 990.0
 offset_top = 46.0
 offset_right = 1275.0
-offset_bottom = 118.0
+offset_bottom = 122.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_ssl00")
 
 [node name="Text" type="Label" parent="SongInfo"]
 layout_mode = 0
 offset_left = 5.0
 offset_right = 280.0
-offset_bottom = 72.0
+offset_bottom = 36.0
 text = "SONG NAME: BOPEEBO
-DIFFICULTY: > HARD <
-SCROLL SPEED: 1.0
-MODIFIER MULTIPLIER: 1.0x"
+[HARD]"
 label_settings = SubResource("LabelSettings_eviot")
+horizontal_alignment = 1
+
+[node name="Text2" type="Label" parent="SongInfo"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 34.0
+offset_right = 280.0
+offset_bottom = 70.0
+text = "RATING: 4.2
+NOTES: 9000000000000000000000000000000
+BF vs DAD"
+label_settings = SubResource("LabelSettings_luisy")
 horizontal_alignment = 1
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
