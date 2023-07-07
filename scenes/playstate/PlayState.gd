@@ -8,6 +8,7 @@ extends Node2D
 @onready var SongProgress = $"CamHUD/SongProgress"
 @onready var boyfriend = $"BF"
 @onready var dad = $"DAD"
+@onready var gf = $"GF"
 @onready var sound = $"/root/Globals/SoundStream"
 @onready var ratingSpr = $"CamHUD/RatingSpr"
 var SONG = Song.new();
@@ -62,7 +63,9 @@ var Stage
 var pauseMenu = preload("res://scenes/playstate/PauseMenu.tscn")
 func _ready():
 	Conductor.songPos = 0
+	Conductor.songPos -= Conductor.crotchet*5
 	SONG = Globals.song
+	Conductor.bpm = SONG.bpm
 	Conductor.connect("beatHit", beatHit)
 	generateSong()
 	Stage = findStage(curSong).instantiate()
@@ -71,10 +74,11 @@ func _ready():
 	playerStrums.playing = true
 	boyfriend.position = Stage.bfPos.position
 	dad.position = Stage.dadPos.position
+	gf.position = Stage.gfPos.position
 	boyfriend._loadChar(SONG.player_1, true)
 	dad._loadChar(SONG.player_2)
+	gf._loadChar('gf')
 	doThing(curSong)
-	Conductor.songPos -= Conductor.crotchet*4
 	ratingSpr.modulate.a = 0
 	Icons.find_child('BFIcon').texture = load("res://assets/images/characters/"+boyfriend.charName+'/icon.png')
 	Icons.find_child('DADIcon').texture = load("res://assets/images/characters/"+dad.charName+'/icon.png')
@@ -84,6 +88,7 @@ func _ready():
 	Inst.connect('finished', endSong)
 	defaultCamZoom = Stage.defaultCamZoom
 func endSong():
+	Highscore.saveHighscore(Globals.curSong, Globals.curDiff, score, snapped(accuracy*100, 0.1))
 	Globals.switchTo('mainmenu/MainMenuState')
 func findStage(a):
 	match a:
@@ -105,7 +110,6 @@ func doCountDown():
 			countDownAmnt -= 1
 			sound.stream = load("res://assets/sfx/"+countDownThings[countDownAmnt]+".ogg")
 			sound.play()
-			beatHit(0)
 			match countDownAmnt:
 				3:
 					var obj3:Sprite2D = Sprite2D.new()
@@ -115,6 +119,7 @@ func doCountDown():
 					var tween3 = create_tween()
 					tween3.tween_property(obj3, "modulate", Color.TRANSPARENT, Conductor.crotchet/1000)
 					tween3.connect('finished', func(): obj3.queue_free())
+					beatHit(0)
 				2:
 					var obj2:Sprite2D = Sprite2D.new()
 					obj2.texture = load("res://assets/images/countdown/"+countDownThings2[countDownAmnt]+".png")
@@ -123,6 +128,9 @@ func doCountDown():
 					var tween2 = create_tween()
 					tween2.tween_property(obj2, "modulate", Color.TRANSPARENT, Conductor.crotchet/1000)
 					tween2.connect('finished', func(): obj2.queue_free())
+					beatHit(0)
+				1:
+					beatHit(0)
 				0:
 					var obj1:Sprite2D = Sprite2D.new()
 					obj1.texture = load("res://assets/images/countdown/"+countDownThings2[countDownAmnt]+".png")
@@ -131,6 +139,7 @@ func doCountDown():
 					var tween1 = create_tween()
 					tween1.tween_property(obj1, "modulate", Color.TRANSPARENT, Conductor.crotchet/1000)
 					tween1.connect('finished', func(): obj1.queue_free())
+					beatHit(0)
 		else:
 			countDownTimer.stop()
 			startSong()
@@ -200,9 +209,9 @@ func positionHud():
 	$CamHUD.offset = ($CamHUD.scale - Vector2(1.0,1.0)) * -(Vector2(1280,720)/Vector2(2.0,2.0))
 func moveCam():
 	if isCurSecBF:
-		camFollow = boyfriend.position + boyfriend.cameraPos
+		camFollow = boyfriend.position + Vector2(-100,-100) + boyfriend.get_midpoint() + boyfriend.cameraPos
 	else:
-		camFollow = dad.position + dad.cameraPos
+		camFollow = dad.position + Vector2(150,-100) + dad.get_midpoint() + dad.cameraPos
 	
 func kill():
 	print('KILL HIMMMM')
@@ -239,7 +248,6 @@ func playDirectionAnim(noteData, suffix, char):
 	else:
 		char._playAnim('sing' + dirNames[noteData])
 func generateSong():
-	Conductor.bpm = SONG.bpm
 	speed = SONG.speed
 	for sec in SONG.notes:
 		var prevNote:Note
@@ -274,6 +282,7 @@ func beatHit(cr):
 		$CamHUD.scale += Vector2(0.03,0.03)
 	dad._dance()
 	boyfriend._dance()
+	gf._dance()
 	Icons.scale = Vector2(1.1,1.1)
 	var tween1 = create_tween()
 	tween1.tween_property(Icons, "scale", Vector2(1,1), Conductor.crotchet/6000)

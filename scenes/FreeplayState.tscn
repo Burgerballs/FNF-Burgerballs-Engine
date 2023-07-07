@@ -64,6 +64,7 @@ theme = ExtResource("3_oh2i0")
 theme_override_styles/panel = SubResource("StyleBoxFlat_84n1j")
 
 [node name="Week" type="Sprite2D" parent="WeekPanel"]
+texture_filter = 2
 position = Vector2(40.0625, 18)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("4_v8le5")
@@ -101,8 +102,7 @@ offset_left = 5.0
 offset_top = 34.0
 offset_right = 280.0
 offset_bottom = 70.0
-text = "RATING: 4.2
-NOTES: 9000000000000000000000000000000
+text = "NOTES: 9000000000000000000000000000000
 BF vs DAD"
 label_settings = SubResource("LabelSettings_luisy")
 horizontal_alignment = 1
@@ -116,3 +116,5 @@ visible = false
 
 [node name="IconTemplate" parent="." instance=ExtResource("7_i0l2o")]
 position = Vector2(76, -94)
+
+[node name="CanvasLayer3" type="CanvasLayer" parent="."]

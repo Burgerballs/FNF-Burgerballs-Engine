@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c53tfjhaqsykt"]
+[gd_scene load_steps=18 format=3 uid="uid://c53tfjhaqsykt"]
 
 [ext_resource type="Texture2D" uid="uid://0cxpvhkuiph0" path="res://assets/images/menus/menuBGBlue.png" id="1_fi0eh"]
 [ext_resource type="Script" path="res://scenes/OptionsMenu.gd" id="1_qgxv7"]
@@ -56,7 +56,17 @@ font_size = 48
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
+[sub_resource type="LabelSettings" id="LabelSettings_xjhji"]
+font = ExtResource("3_aettq")
+font_size = 14
+font_color = Color(1, 0, 0, 1)
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+shadow_color = Color(1, 1, 1, 0)
+
 [node name="OptionsMenu" type="Node2D"]
+z_index = 20
 script = ExtResource("1_qgxv7")
 
 [node name="MenuBgBlue" type="Sprite2D" parent="."]
@@ -210,4 +220,14 @@ offset_right = 1270.0
 offset_bottom = 401.0
 text = "> D <"
 label_settings = SubResource("LabelSettings_r63xw")
+horizontal_alignment = 1
+
+[node name="warninglabel" type="Label" parent="."]
+visible = false
+offset_left = 249.0
+offset_top = 694.0
+offset_right = 1275.0
+offset_bottom = 710.0
+text = "THIS IS IN THE PAUSE MODE, ALL GAME RELATED OPTIONS REQUIRE A RESTART OF THE SONG"
+label_settings = SubResource("LabelSettings_xjhji")
 horizontal_alignment = 1

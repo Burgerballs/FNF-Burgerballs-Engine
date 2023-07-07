@@ -12,8 +12,9 @@ config_version=5
 
 config/name="Burgerballs Engine"
 config/description="This is a fuckuing=gfdgkhndfkjbskfghdskjfhskfjhmnkvjnguozfgyhfugfwekfaehjfgklvjaskldfvlsjvhj,vbndsfkhgl.szeuiklfgasruilgfhuakejv,jksdgvjhbmkszdfkl,vahjskdgvhjad mvnzdm,vzh,mv,nmxcvnm,cnmv,zcnm,vxzcnm,vnsdfm,fjkl,sadugsrujkholgzvhnzjkvhskldouvs"
+config/tags=PackedStringArray("sex")
 run/main_scene="res://scenes/mainmenu/MainMenuState.tscn"
-config/features=PackedStringArray("4.0", "GL Compatibility")
+config/features=PackedStringArray("4.1", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 boot_splash/fullsize=false
@@ -25,12 +26,17 @@ config/icon="res://icon.svg"
 Conductor="*res://game/Conductor.gd"
 Preferences="*res://objects/Preferences.gd"
 Globals="*res://scenes/Globals.tscn"
+Highscore="*res://objects/Highscore.gd"
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/vsync/vsync_mode=0
+
+[dotnet]
+
+project/assembly_name="Burgerballs Engine"
 
 [editor_plugins]
 

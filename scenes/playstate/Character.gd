@@ -7,12 +7,14 @@ class CharAnimConfig:
 	var fps:int
 	var anim:String
 	var animName:String
-	func _init(fpss,animm,animname,offsets,loops):
+	var indices = []
+	func _init(fpss,animm,animname,offsets,loops, indices):
 		fps = fpss
 		anim = animm
 		animName = animname
 		self.offsets = offsets
 		self.loops = loops
+		self.indices = indices
 class CharacterData:
 	extends Node
 	var charAnims:Array[CharAnimConfig]
@@ -29,7 +31,7 @@ class CharacterData:
 		var content = JSON.parse_string(file.get_as_text())
 		for animm in range(content['animations'].size()):
 			var anim = content['animations'][animm]
-			charAnims.append(CharAnimConfig.new(anim['fps'], anim['anim'], anim['name'],Vector2(anim['offsets'][0],anim['offsets'][1]), anim['loop']))
+			charAnims.append(CharAnimConfig.new(anim['fps'], anim['anim'], anim['name'],Vector2(anim['offsets'][0],anim['offsets'][1]), anim['loop'],anim['indices']))
 		antiAiliasing = !content["no_antialiasing"]
 		flipX = content["flip_x"]
 		healthBarColor = Color(content["healthbar_colors"][0]/256.0,
@@ -44,49 +46,87 @@ var charData:CharacterData
 var curAnim = ''
 var isBf = false
 var cameraPos:Vector2
-
+var charFrames:SpriteFrames
+var charAnimFrames:SpriteFrames
 func _loadChar(charName = 'bf', isBf = false):
 	self.charName = charName
 	charData = CharacterData.new(charName)
-	print(charData.charAnims[0].animName)
 	self.isBf = isBf
 	centered = false
 	flip_h = charData.flipX
 	if isBf:
 		flip_h = !flip_h
 	if !FileAccess.file_exists("res://assets/images/characters/"+charName+'/'+charName+'.res'):
-		set_sprite_frames(load("res://assets/images/characters/dad/dad.res"))
+		charFrames=load("res://assets/images/characters/dad/dad.res")
 		self.charName = 'dad'
 	else:
-		set_sprite_frames(load("res://assets/images/characters/"+charName+'/'+charName+'.res'))
+		charFrames = load("res://assets/images/characters/"+charName+'/'+charName+'.res')
+	charAnimFrames = SpriteFrames.new()
+	for anim in charData.charAnims:
+		if anim.indices == []:
+			addAnimFromName(anim.anim, anim.animName, anim.fps, anim.loops)
+		else:
+			addAnimFromIndices(anim.anim, anim.animName, anim.fps, anim.loops,anim.indices)
+	set_sprite_frames(charAnimFrames)
 	position+=charData.position
-	cameraPos = charData.camOffset
-	_playAnim('idle')
+	if !flip_h:
+		cameraPos = charData.camOffset
+	else:
+		cameraPos = !charData.camOffset
+	_dance()
 	connect("animation_finished", _animFinished)
+func get_midpoint():
+	if findAnim('idle'):
+		return Vector2(sprite_frames.get_frame_texture('idle',0).region.size.x/2,sprite_frames.get_frame_texture('idle',0).region.size.y/2)
+	else:
+		return Vector2(sprite_frames.get_frame_texture('danceLeft',0).region.size.x/2,sprite_frames.get_frame_texture('danceLeft',0).region.size.y/2)
+func addAnimFromName(name,resname,fps,loop):
+	charAnimFrames.add_animation(name)
+	for i in charFrames.get_frame_count(resname.replace('0', '')):
+		charAnimFrames.add_frame(name, charFrames.get_frame_texture(resname.replace('0', ''), i), 1, i)
+		charAnimFrames.set_animation_speed(name, fps)
+		charAnimFrames.set_animation_loop(name, loop)
+func addAnimFromIndices(name,resname,fps,loop,indices):
+	charAnimFrames.add_animation(name)
+	for i in indices.size():
+		var animnumber = indices[i]
+		if animnumber > charFrames.get_frame_count(resname.replace('0', ''))-1:
+			animnumber = charFrames.get_frame_count(resname.replace('0', ''))-1
+		charAnimFrames.add_frame(name, charFrames.get_frame_texture(resname.replace('0', ''), animnumber), 1, i)
+		charAnimFrames.set_animation_speed(name, fps)
+		charAnimFrames.set_animation_loop(name, loop)
+
+var danced = false
 func _dance():
 	if !curAnim.begins_with('sing'):
-		_playAnim('idle')
+		if findAnim('idle'):
+			_playAnim('idle')
+		elif findAnim('danceLeft'):
+			_playAnim('dance' + ('Left' if !danced else 'Right'))
+			danced = !danced
+func findAnim(anim):
+	for i in charData.charAnims.size():
+		if charData.charAnims[i].anim == anim:
+			return true
+	return false
 func _playAnim(animName):
-	pause()
-	for anim in charData.charAnims:
-		if anim.anim == animName:
-			if curAnim != animName:
-				doTheAnim(anim.animName, anim.offsets)
-				curAnim = anim.anim
-			elif curAnim.begins_with('sing'):
-				frame = 0
-				play('',1)
-			else:
-				doTheAnim(anim.animName, anim.offsets)
-				curAnim = anim.anim
+	play(animName)
+	if animName != 'idle' && !animName.begins_with('dance'):
+		set_frame_and_progress(0,0)
+	curAnim = animName
+	var offsets = Vector2(0,0)
+	for i in charData.charAnims.size():
+		if charData.charAnims[i].anim == animName:
+			offsets = charData.charAnims[i].offsets
 			break
-			
-func doTheAnim(animName, offsets):
-	play(animName.replace('0', ''))
 	if !flip_h:
 		set_offset(-offsets)
 	else:
 		set_offset(offsets)
 func _animFinished():
-	if curAnim != 'idle':
-		_playAnim('idle')
+	if (curAnim != 'idle') && not curAnim.begins_with('dance'):
+		if !findAnim('idle'):
+			_playAnim('dance' + ('Left' if !danced else 'Right'))
+			danced = !danced
+		else:
+			_playAnim('idle')

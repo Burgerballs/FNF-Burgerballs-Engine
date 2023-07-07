@@ -394,8 +394,16 @@ position = Vector2(634, 359)
 
 [node name="BF" type="AnimatedSprite2D" parent="."]
 position = Vector2(1015, 531)
+centered = false
 script = ExtResource("8_r7dtf")
 
 [node name="DAD" type="AnimatedSprite2D" parent="."]
 position = Vector2(293, 544)
+centered = false
+script = ExtResource("8_r7dtf")
+
+[node name="GF" type="AnimatedSprite2D" parent="."]
+z_index = -1
+position = Vector2(293, 544)
+centered = false
 script = ExtResource("8_r7dtf")

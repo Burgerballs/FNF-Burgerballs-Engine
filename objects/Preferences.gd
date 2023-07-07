@@ -5,6 +5,7 @@ var defaultSave:Dictionary = {
 	"multithreading": false,
 	"fps": 60,
 	"transitionspd": 1.0,
+	'antialiasing': true,
 	"controls": {
 		"left": 'LEFT',
 		'down': 'DOWN',
@@ -51,6 +52,7 @@ func set_binds():
 func actUpon():
 	set_binds()
 	Engine.max_fps = getPreference("fps")
+	get_tree().current_scene.texture_filter = (2 if getPreference('antialiasing') else 1)
 	ProjectSettings.set_setting('rendering/driver/threads/threadmodel', 'Multi-Threaded' if getPreference('multithreading') else "single-safe")
 func saveData():
 	var file = FileAccess.open("user://Preferences.json", FileAccess.WRITE)

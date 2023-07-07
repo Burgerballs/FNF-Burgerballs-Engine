@@ -31,6 +31,7 @@ func _init(strumTime, noteData, mustHitt):
 	susRect = noteSkin.find_child('ColorRect')
 	susLine = susRect.find_child('susLine')
 	susEnd = susRect.find_child('susEnd')
+	position.y = 2000
 	
 func reloadSprites():
 	sprite.play(dirNames[dir]) 

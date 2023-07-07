@@ -15,7 +15,7 @@ func _ready():
 	tweenr.tween_property($Panel, "modulate:a", 1, 0.3)
 	$Label.text = Globals.song.songName.to_upper()+'\n'+Globals.song.diff
 	
-	
+var optionsState = preload("res://scenes/OptionsMenu.tscn")
 
 func changeSel(fucker):
 	curSel += fucker
@@ -45,6 +45,12 @@ func _process(delta):
 				self.queue_free()
 			'restart':
 				Globals.play_song(Globals.song.songName.to_lower().replace(' ','-'), Globals.song.diff)
+			'options':
+				var OptionsThing = optionsState.instantiate()
+				OptionsThing.isNotMenu = true
+				OptionsThing.thing = true
+				add_child(OptionsThing)
+				self.process_mode = 0
 			'exit':
 				Globals.switchTo('mainmenu/MainMenuState')
 	elif Input.is_action_just_pressed('uiback'):

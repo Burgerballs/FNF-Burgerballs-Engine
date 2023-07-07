@@ -14,15 +14,15 @@ defaultCamZoom = 0.9
 
 [node name="BF" type="Node2D" parent="."]
 z_index = 3
-position = Vector2(820, -100)
+position = Vector2(770, 100)
 
 [node name="DAD" type="Node2D" parent="."]
 z_index = 3
-position = Vector2(0, -100)
+position = Vector2(100, 100)
 
 [node name="GF" type="Node2D" parent="."]
 z_index = 3
-position = Vector2(348, 107)
+position = Vector2(400, 130)
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
@@ -31,20 +31,23 @@ motion_scale = Vector2(0.9, 0.9)
 
 [node name="Stagefront" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
 z_index = 1
-position = Vector2(624, 762)
+position = Vector2(-650, 600)
 scale = Vector2(1.1, 1.1)
 texture = ExtResource("2_1reld")
+centered = false
 
 [node name="Stageback" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
-position = Vector2(603, 387)
-scale = Vector2(0.9, 0.9)
+position = Vector2(-600, -200)
+scale = Vector2(1.1, 1.1)
 texture = ExtResource("2_5u7hr")
+centered = false
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2(1.3, 1.3)
 
 [node name="Stagecurtains" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2"]
 z_index = 1
-position = Vector2(625, 343)
-scale = Vector2(1.1, 1.1)
+position = Vector2(-500, -300)
+scale = Vector2(0.9, 0.9)
 texture = ExtResource("4_yvywg")
+centered = false

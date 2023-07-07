@@ -9,7 +9,7 @@ func _process(delta:float) -> void:
 	for i in range(get_child_count()-1,-1,-1):
 		var note:Note = get_child(i)
 		var strum_pos:Vector2 = note.strumLine.get_child(note.dir).global_position
-		if !note.wasGoodHit:
-			note.position.y = strum_pos.y - ((0.45 * downscroll_mult) * (Conductor.songPos - note.pos) * scroll_speed)
-		note.position.x = strum_pos.x
+		if !note.wasGoodHit && ((strum_pos.y - ((0.45 * downscroll_mult) * (Conductor.songPos - note.pos) * scroll_speed)) <= 900 && (((strum_pos.y - ((0.45 * downscroll_mult) * (Conductor.songPos - note.pos) * scroll_speed)))) >= -900):
+				note.position.y = strum_pos.y - ((0.45 * downscroll_mult) * (Conductor.songPos - note.pos) * scroll_speed)
+				note.position.x = strum_pos.x
 		var strum:Receptor = note.strumLine.get_child(note.dir)

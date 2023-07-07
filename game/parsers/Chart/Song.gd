@@ -17,8 +17,8 @@ func parse_chart(song,diff):
 	else:
 		filePath += '.json'
 	self.diff = diff
-	print(filePath)
 	var file = FileAccess.open(filePath, FileAccess.READ)
+	
 	var content = JSON.parse_string(file.get_as_text()).song
 	songName = content['song']
 	needsVoices = content['needsVoices']

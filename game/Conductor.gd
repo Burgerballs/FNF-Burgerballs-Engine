@@ -21,8 +21,8 @@ func linkStream(stream:AudioStreamPlayer):
 func _process(delta):
 	if AttatchedStream != null:
 		songPos = AttatchedStream.get_playback_position()*1000
-		crotchet = ((60/bpm)*1000)
-		stepCrotchet = crotchet/4
+	crotchet = ((60/bpm)*1000)
+	stepCrotchet = crotchet/4
 	oldStep = curStep
 	oldBeat = curBeat
 	updateStep()

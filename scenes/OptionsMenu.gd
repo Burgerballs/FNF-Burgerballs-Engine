@@ -2,8 +2,8 @@ extends Node2D
 
 var optionTexts:Array
 var optionTexts2:Array
-var controlyet = true # for doing it inside of menus
 var isNotMenu = false
+
 @onready var options = $"Container/Options"
 @onready var optionl = $"Container/OptionL"
 @onready var optionsbar = $"Container/VBoxContainer"
@@ -12,6 +12,7 @@ var isNotMenu = false
 @onready var keybindlayer = $"KEYBINDLAYER"
 @onready var keybindpanel = $"KEYBINDLAYER/Panel/Setting"
 var sideBarState = true
+var thing
 
 var fuck:Dictionary = {
 	'gameplay' = [
@@ -20,7 +21,8 @@ var fuck:Dictionary = {
 	],
 	'graphics' = [
 		['FPS LIMIT', 'fps', 'float', 'No description given or needed.', [1, 60, 300]],
-		['MULTITHREADED RENDERING', 'multithreading', 'bool']
+		['MULTITHREADED RENDERING', 'multithreading', 'bool'],
+		['ANTI-ALIASING', 'antialiasing', 'bool', 'Pixels get smoothed out if this option is set to "True"']
 	],
 	'preferences' = [
 		['TRANSITION SPEED', 'transitionspd', 'float', 'The animation that plays when you enter something will be increased in speed depending on the number you set.', [0.25,1,5]]
@@ -45,23 +47,32 @@ var fuck:Dictionary = {
 func _ready():
 	optionTexts = optionsbar.get_children()
 	changeSelSideBar(0)
-	Conductor.playMusic('music/peebutter', Globals.BGMStream, true, true)
 	coolBoxSizeThing(optionsbar)
+	$MenuBgBlue.visible = !isNotMenu
+	$magenta.visible = !isNotMenu
+	if isNotMenu:
+		process_mode = 3
+		if thing == false:
+			get_tree().paused = true
+		else:
+			$warninglabel.visible = true
+	else:
+		Conductor.playMusic('music/peebutter', Globals.BGMStream, true, true)
 
 func coolBoxSizeThing(box):
 	var thing = $"Container/ColorRect3"
 	var boxproperties = [box.global_position, box.size]
 	var postween = create_tween()
-	postween.set_ease(Tween.EASE_IN_OUT)
+	postween.set_ease(Tween.EASE_OUT)
 	postween.set_trans(Tween.TRANS_QUAD)
 	postween.tween_property(thing, 'global_position', boxproperties[0], 0.4)
 	var sizeween = create_tween()
-	sizeween.set_ease(Tween.EASE_IN_OUT)
+	sizeween.set_ease(Tween.EASE_OUT)
 	sizeween.set_trans(Tween.TRANS_QUAD)
 	sizeween.tween_property(thing, 'size', boxproperties[1], 0.4)
 var waitTime = 0
 func _process(delta):
-	if waitTime <= 0 && controlyet == true:
+	if waitTime <= 0:
 		if Input.is_action_just_pressed('uiup') && keybindlayer.visible == false:
 			if sideBarState:
 				changeSelSideBar(-1)
@@ -100,6 +111,12 @@ func _process(delta):
 				if !isNotMenu:
 					waitTime = 1
 					Globals.switchTo('mainmenu/MainMenuState')
+				else:
+					if thing == true:
+						$'../'.process_mode = 3
+					else:
+						get_tree().paused = false
+					queue_free()
 	if waitTime > 0:
 		waitTime -= delta
 func _input(event):

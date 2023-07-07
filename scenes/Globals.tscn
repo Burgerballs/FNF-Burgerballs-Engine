@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://dqj3eq1xub6cr"]
+[gd_scene load_steps=15 format=3 uid="uid://dqj3eq1xub6cr"]
 
 [ext_resource type="Script" path="res://scenes/Globals.gd" id="1_abu0s"]
 [ext_resource type="PackedScene" uid="uid://eeseefksm1gr" path="res://scenes/Fps.tscn" id="1_xfbvu"]
 [ext_resource type="LabelSettings" uid="uid://fxutikh0tgan" path="res://assets/fonts/vcr-large.tres" id="3_7skvb"]
+[ext_resource type="FontFile" uid="uid://cmisj8l6ni57l" path="res://assets/fonts/vcr.ttf" id="4_kh13g"]
 
 [sub_resource type="Gradient" id="Gradient_ghgqb"]
 offsets = PackedFloat32Array(0, 0.245552, 0.533808, 0.740214, 1)
@@ -125,11 +126,29 @@ _data = {
 "show": SubResource("Animation_liokh")
 }
 
+[sub_resource type="LabelSettings" id="LabelSettings_vnwhs"]
+font = ExtResource("4_kh13g")
+font_size = 18
+
 [node name="Globals" type="CanvasLayer"]
 process_mode = 3
 process_priority = -100
 layer = 8
 script = ExtResource("1_abu0s")
+
+[node name="Loading" type="Label" parent="."]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -140.0
+offset_top = -25.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "LOADING..."
+label_settings = ExtResource("3_7skvb")
 
 [node name="Fps" parent="." instance=ExtResource("1_xfbvu")]
 z_index = 7
@@ -171,3 +190,92 @@ speed_scale = 0.5
 libraries = {
 "": SubResource("AnimationLibrary_hof1n")
 }
+
+[node name="SoundTray" type="ColorRect" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+grow_horizontal = 2
+color = Color(0, 0, 0, 0.498039)
+
+[node name="Label" type="Label" parent="SoundTray"]
+layout_mode = 0
+offset_top = 21.0
+offset_right = 80.0
+offset_bottom = 40.0
+text = "VOLUME"
+label_settings = SubResource("LabelSettings_vnwhs")
+horizontal_alignment = 1
+
+[node name="0" type="ColorRect" parent="SoundTray"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 14.0
+offset_right = 14.0
+offset_bottom = 15.0
+
+[node name="1" type="ColorRect" parent="SoundTray"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 13.0
+offset_right = 20.0
+offset_bottom = 15.0
+
+[node name="2" type="ColorRect" parent="SoundTray"]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 12.0
+offset_right = 26.0
+offset_bottom = 15.0
+
+[node name="3" type="ColorRect" parent="SoundTray"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 11.0
+offset_right = 32.0
+offset_bottom = 15.0
+
+[node name="4" type="ColorRect" parent="SoundTray"]
+layout_mode = 0
+offset_left = 34.0
+offset_top = 10.0
+offset_right = 38.0
+offset_bottom = 15.0
+
+[node name="5" type="ColorRect" parent="SoundTray"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 9.0
+offset_right = 44.0
+offset_bottom = 15.0
+
+[node name="6" type="ColorRect" parent="SoundTray"]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 8.0
+offset_right = 50.0
+offset_bottom = 15.0
+
+[node name="7" type="ColorRect" parent="SoundTray"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 7.0
+offset_right = 56.0
+offset_bottom = 15.0
+
+[node name="8" type="ColorRect" parent="SoundTray"]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 6.0
+offset_right = 62.0
+offset_bottom = 15.0
+
+[node name="9" type="ColorRect" parent="SoundTray"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 5.0
+offset_right = 68.0
+offset_bottom = 15.0
