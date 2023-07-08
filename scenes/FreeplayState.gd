@@ -102,6 +102,13 @@ func changeSel(fucker):
 		for s in i.notes:
 			if s.playedByBf:
 				noteCount+=1
+	if FileAccess.file_exists('res://assets/weeks/'+songList[curSel].weekItComesFrom+'/week.png'):
+		$"WeekPanel/Label".visible = false
+		$"WeekPanel/Week".visible = true;
+		$"WeekPanel/Week".texture = load('res://assets/weeks/'+songList[curSel].weekItComesFrom+'/week.png')
+	else:
+		$"WeekPanel/Label".visible = true
+		$"WeekPanel/Week".visible = false
 	
 	$"SongInfo/Text".text = 'SONG NAME: ' + songList[curSel].songName.to_upper() + '\n['+diffList[curDiff]+']'
 	$"SongInfo/Text2".text = 'NOTES:' + str(noteCount)

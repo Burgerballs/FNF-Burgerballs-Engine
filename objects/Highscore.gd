@@ -31,5 +31,15 @@ func getHighscore(song,diff):
 		ret = scoreArray[song][diff]
 	return ret
 func saveHighscore(song,diff,score,acc):
-	scoreArray[song][diff] ={'score':score,'accuracy':acc}
+	scoreArray.merge(
+		{
+			song: { 
+				diff: {
+					'score':score,
+					'accuracy':acc
+				}
+			}
+		}
+	,true)
+				
 	saveData()

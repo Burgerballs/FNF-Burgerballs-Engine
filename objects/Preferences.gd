@@ -17,7 +17,8 @@ var defaultSave:Dictionary = {
 		'uiright': 'RIGHT',
 		'uienter': 'ENTER',
 		'uiback': 'ESCAPE'
-	}
+	},
+	'scrollspd':1.0
 }
 var playerSaveFile
 func _ready():

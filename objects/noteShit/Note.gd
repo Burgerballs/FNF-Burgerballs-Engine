@@ -64,7 +64,7 @@ func _process(d):
 	if wasGoodHit:
 		sprite.visible = false
 		strumLine.get_child(dir).playAnim("confirm")
-		holdLength -= (d * 1000.0 * (scrollSpeed/1.75))
+		holdLength -= (d * (Conductor.stepCrotchet*10))
 		game.Voices.volume_db = 0
 		game.playDirectionAnim(dir, '', char)
 		if holdLength <= 10:

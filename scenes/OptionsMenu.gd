@@ -25,6 +25,7 @@ var fuck:Dictionary = {
 		['ANTI-ALIASING', 'antialiasing', 'bool', 'Pixels get smoothed out if this option is set to "True"']
 	],
 	'preferences' = [
+		['SCROLL SPEED MULTIPLIER', 'scrollspd', 'float', 'The scroll speed is multiplied by your set number', [0.1,1,3]],
 		['TRANSITION SPEED', 'transitionspd', 'float', 'The animation that plays when you enter something will be increased in speed depending on the number you set.', [0.25,1,5]]
 	],
 	'controls' = [
@@ -125,7 +126,6 @@ func _input(event):
 		if (curOptionSel[1] == 'uienter') or (curOptionSel[1] != 'uienter' && !Input.is_action_just_pressed('uienter')):
 			Preferences.setControl(curOptionSel[1], key)
 			waitTime = 0.1
-			print(key)
 			keybindlayer.visible = false
 		drawOptionThing()
 		Preferences.actUpon()
@@ -210,6 +210,8 @@ func getOptionMeasure():
 			return ' FPS'
 		'TRANSITION SPEED':
 			return 'x'
+		'SCROLL SPEED MULTIPLIER':
+			return 'x'
 		_:
 			return ''
 var curSel = 0
@@ -243,4 +245,3 @@ func drawSelThing():
 		var thing = $"Container/Options".get_child(i)
 		if thing.is_queued_for_deletion() != true || !(i >= fuck.get(optionTexts[curSel].name).size()) || i != null:
 			optionTexts2.append(thing)
-	print(optionTexts2.size()-1)

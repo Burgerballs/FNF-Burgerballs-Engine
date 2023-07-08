@@ -24,6 +24,7 @@ class CharacterData:
 	var scale:float
 	var position:Vector2
 	var camOffset
+	var singDuration = 4.0
 	func _init(charName):
 		var file = FileAccess.open("res://assets/images/characters/"+charName+'/'+charName+'.json', FileAccess.READ)
 		if !FileAccess.file_exists("res://assets/images/characters/"+charName+'/'+charName+'.json'):
@@ -40,6 +41,7 @@ class CharacterData:
 		position = Vector2(content["position"][0],content["position"][1])
 		camOffset = Vector2(content["camera_position"][0],content["camera_position"][1])
 		scale = content["scale"]
+		singDuration = content["sing_duration"]
 
 var charName:String = 'bf'
 var charData:CharacterData
@@ -48,6 +50,7 @@ var isBf = false
 var cameraPos:Vector2
 var charFrames:SpriteFrames
 var charAnimFrames:SpriteFrames
+var singDuration = 4.0
 func _loadChar(charName = 'bf', isBf = false):
 	self.charName = charName
 	charData = CharacterData.new(charName)
@@ -73,6 +76,7 @@ func _loadChar(charName = 'bf', isBf = false):
 		cameraPos = charData.camOffset
 	else:
 		cameraPos = !charData.camOffset
+	singDuration = charData.singDuration
 	_dance()
 	connect("animation_finished", _animFinished)
 func get_midpoint():
@@ -95,23 +99,30 @@ func addAnimFromIndices(name,resname,fps,loop,indices):
 		charAnimFrames.add_frame(name, charFrames.get_frame_texture(resname.replace('0', ''), animnumber), 1, i)
 		charAnimFrames.set_animation_speed(name, fps)
 		charAnimFrames.set_animation_loop(name, loop)
-
+var singedFor = 0.0
+func _process(delta):
+	if curAnim.begins_with('sing') && !curAnim.ends_with('miss'):
+		singedFor+=delta
+	else:
+		singedFor=0
+	if (!isBf && singedFor >= (Conductor.stepCrotchet * singDuration)/1000):
+		_dance(true)
 var danced = false
-func _dance():
+func _dance(forced = false):
 	if !curAnim.begins_with('sing'):
 		if findAnim('idle'):
-			_playAnim('idle')
+			_playAnim('idle',forced)
 		elif findAnim('danceLeft'):
-			_playAnim('dance' + ('Left' if !danced else 'Right'))
+			_playAnim('dance' + ('Left' if !danced else 'Right'),forced)
 			danced = !danced
 func findAnim(anim):
 	for i in charData.charAnims.size():
 		if charData.charAnims[i].anim == anim:
 			return true
 	return false
-func _playAnim(animName):
+func _playAnim(animName, forced = false):
 	play(animName)
-	if animName != 'idle' && !animName.begins_with('dance'):
+	if forced or (animName != 'idle' && !animName.begins_with('dance')):
 		set_frame_and_progress(0,0)
 	curAnim = animName
 	var offsets = Vector2(0,0)
@@ -124,7 +135,7 @@ func _playAnim(animName):
 	else:
 		set_offset(offsets)
 func _animFinished():
-	if (curAnim != 'idle') && not curAnim.begins_with('dance'):
+	if (curAnim != 'idle') && not curAnim.begins_with('dance') or (!isBf && not curAnim.begins_with('sing')&&(curAnim != 'idle') && not curAnim.begins_with('dance')):
 		if !findAnim('idle'):
 			_playAnim('dance' + ('Left' if !danced else 'Right'))
 			danced = !danced
