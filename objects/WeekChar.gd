@@ -32,6 +32,7 @@ var charAnimFUCK:SpriteFrames
 func _init(name):
 	charAnimFUCK = SpriteFrames.new()
 	charName = name
+	centered = false
 func addAnimFromName(name,resname,fps,loop):
 	charAnimFUCK.add_animation(name)
 	for i in frames.get_frame_count(resname.replace('0', '')):
