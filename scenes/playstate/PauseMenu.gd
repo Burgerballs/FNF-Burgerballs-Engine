@@ -7,6 +7,11 @@ func _ready():
 	$Label/AnimationPlayer.play('animgoin')
 	Conductor.playMusic('music/breakfast',Globals.BGMStream,true)
 	Globals.BGMStream.volume_db = -15
+	for i in textArray:
+		if i.text == 'OPTIONS MENU' && Globals.fromWhere == 'options':
+			$Alphabets.remove_child(i)
+			textArray.remove_at(textArray.find(i))
+			i.free()
 	changeSel(0)
 	$Panel.modulate.a = 0
 	var tweenr = create_tween()
@@ -52,7 +57,7 @@ func _process(delta):
 				add_child(OptionsThing)
 				self.process_mode = 0
 			'exit':
-				Globals.switchTo('mainmenu/MainMenuState')
+				Globals.fromPlaystate()
 	elif Input.is_action_just_pressed('uiback'):
 		Globals.BGMStream.stop()
 		Globals.BGMStream.volume_db = 0

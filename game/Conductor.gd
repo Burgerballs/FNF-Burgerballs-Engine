@@ -18,7 +18,7 @@ signal songLoaded(songName:String)
 var AttatchedStream:AudioStreamPlayer
 func linkStream(stream:AudioStreamPlayer):
 	AttatchedStream = stream
-func _process(delta):
+func _physics_process(delta):
 	if AttatchedStream != null:
 		songPos = AttatchedStream.get_playback_position()*1000
 	crotchet = ((60/bpm)*1000)
@@ -32,12 +32,12 @@ func _process(delta):
 func updateStep():
 	curStep = floor(songPos / stepCrotchet)
 	curBeat = floor(curStep / 4)
-func playMusic(path:String, stream:AudioStreamPlayer, loop = false, showSongCredit = false):
+func playMusic(path:String, stream:AudioStreamPlayer, loop = false, showSongCredit = false, startAt = 0.0):
 	path = "res://assets/"+path+".ogg"
 	if FileAccess.file_exists(path):
 		stream.stop()
 		stream.stream = load(path)
 		stream.stream.loop = loop
-		stream.play(0.0)
+		stream.play(startAt)
 		if showSongCredit:
 			songLoaded.emit(path.split('/')[path.split('/').size()-1].replace('.ogg', ''))

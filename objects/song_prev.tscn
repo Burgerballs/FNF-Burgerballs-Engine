@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://dtphqnciycfkq"]
+
+[ext_resource type="Theme" uid="uid://b3l5cf3mqtujs" path="res://assets/opacityblack.tres" id="1_5lgwg"]
+[ext_resource type="Script" path="res://objects/song_prev.gd" id="2_d63qi"]
+[ext_resource type="PackedScene" uid="uid://dkc78o5xt0g1p" path="res://objects/noteShit/Strumline.tscn" id="2_inbtt"]
+[ext_resource type="FontFile" uid="uid://cmisj8l6ni57l" path="res://assets/fonts/vcr.ttf" id="4_23yy2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_84n1j"]
+bg_color = Color(0, 0, 0, 0.6)
+
+[sub_resource type="LabelSettings" id="LabelSettings_kmhuf"]
+font = ExtResource("4_23yy2")
+font_size = 8
+
+[node name="SongPrev" type="Panel"]
+clip_contents = true
+offset_right = 285.0
+offset_bottom = 588.0
+theme = ExtResource("1_5lgwg")
+theme_override_styles/panel = SubResource("StyleBoxFlat_84n1j")
+script = ExtResource("2_d63qi")
+
+[node name="Strumline" parent="." instance=ExtResource("2_inbtt")]
+position = Vector2(41, 548)
+scale = Vector2(0.6, 0.6)
+
+[node name="SongPrevNoteGroup" type="Node2D" parent="."]
+
+[node name="InstStream" type="AudioStreamPlayer" parent="."]
+
+[node name="VoiceStream" type="AudioStreamPlayer" parent="."]
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 285.0
+offset_bottom = 11.0
+text = "sustains dont work yet sorry dont kill me or my family..."
+label_settings = SubResource("LabelSettings_kmhuf")
+horizontal_alignment = 1
+vertical_alignment = 1

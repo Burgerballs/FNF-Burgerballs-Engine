@@ -1,11 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://kssg66eexydo"]
+[gd_scene load_steps=5 format=3 uid="uid://bpad18di0kayg"]
 
 [ext_resource type="Script" path="res://scenes/playstate/Stage.gd" id="1_skprp"]
 [ext_resource type="Texture2D" uid="uid://bn34cn1xf6y7l" path="res://scenes/playstate/stages/default/stagefront.png" id="2_1reld"]
 [ext_resource type="Texture2D" uid="uid://cgnk880o4lym5" path="res://scenes/playstate/stages/default/stageback.png" id="2_5u7hr"]
 [ext_resource type="Texture2D" uid="uid://dl411nlb2pf6q" path="res://scenes/playstate/stages/default/stagecurtains.png" id="4_yvywg"]
 
-[node name="Default" type="Node2D" node_paths=PackedStringArray("bfPos", "dadPos", "gfPos")]
+[node name="Stage" type="Node2D" node_paths=PackedStringArray("bfPos", "dadPos", "gfPos")]
 script = ExtResource("1_skprp")
 bfPos = NodePath("BF")
 dadPos = NodePath("DAD")

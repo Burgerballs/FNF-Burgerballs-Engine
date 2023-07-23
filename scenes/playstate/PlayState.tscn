@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://g607at54b8k2"]
+[gd_scene load_steps=25 format=3 uid="uid://g607at54b8k2"]
 
 [ext_resource type="Script" path="res://scenes/playstate/PlayState.gd" id="1_eywoe"]
 [ext_resource type="PackedScene" uid="uid://dkc78o5xt0g1p" path="res://objects/noteShit/Strumline.tscn" id="2_16luq"]
@@ -59,6 +59,10 @@ _data = {
 "RESET": SubResource("Animation_xo3rw"),
 "boing": SubResource("Animation_qenkh")
 }
+
+[sub_resource type="LabelSettings" id="LabelSettings_7h376"]
+font = ExtResource("5_82f0k")
+font_size = 12
 
 [sub_resource type="LabelSettings" id="LabelSettings_cfpbh"]
 font = ExtResource("5_82f0k")
@@ -235,7 +239,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -50.0
+offset_top = -46.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 25
@@ -248,6 +252,16 @@ horizontal_alignment = 1
 libraries = {
 "": SubResource("AnimationLibrary_dsrm7")
 }
+
+[node name="Label" type="Label" parent="CamHUD/ScoreTxt"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.8
+text = "NO MODIFIERS"
+label_settings = SubResource("LabelSettings_7h376")
+horizontal_alignment = 1
 
 [node name="BFStrums" parent="CamHUD" instance=ExtResource("2_16luq")]
 modulate = Color(1, 1, 1, 0)
@@ -262,9 +276,9 @@ scale = Vector2(1, 1)
 [node name="TimeDisplay" type="Label" parent="CamHUD"]
 modulate = Color(1, 1, 1, 0)
 offset_left = 587.0
-offset_top = 643.0
+offset_top = 648.0
 offset_right = 691.0
-offset_bottom = 661.0
+offset_bottom = 666.0
 text = "1:00 / 1:00
 "
 label_settings = SubResource("LabelSettings_cfpbh")
@@ -308,7 +322,11 @@ value = 50.0
 show_percentage = false
 
 [node name="NoteGroup" type="Node2D" parent="CamHUD"]
+process_priority = -10
+visibility_layer = 2
 z_index = 1
+texture_filter = 1
+texture_repeat = 1
 script = ExtResource("4_qoe8d")
 
 [node name="HealthBar" type="Sprite2D" parent="CamHUD"]

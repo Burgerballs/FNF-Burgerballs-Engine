@@ -92,17 +92,17 @@ offset_right = 369.0
 text = "CONTINUE"
 is_menu_item = true
 
-[node name="options" parent="Alphabets" instance=ExtResource("1_d605d")]
-custom_minimum_size = Vector2(540, 70)
-offset_right = 540.0
-text = "OPTIONS MENU"
-is_menu_item = true
-target_y = 1
-
 [node name="restart" parent="Alphabets" instance=ExtResource("1_d605d")]
 custom_minimum_size = Vector2(551, 70)
 offset_right = 551.0
 text = "RESTART SONG"
+is_menu_item = true
+target_y = 1
+
+[node name="options" parent="Alphabets" instance=ExtResource("1_d605d")]
+custom_minimum_size = Vector2(540, 70)
+offset_right = 540.0
+text = "OPTIONS MENU"
 is_menu_item = true
 target_y = 1
 

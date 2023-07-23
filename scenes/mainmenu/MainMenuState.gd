@@ -5,7 +5,6 @@ var curSel:int = 0
 func _ready():
 	optionSprs = $Options.get_children()
 	changeSel(0)
-	Conductor.playMusic('music/freakyMenu', Globals.BGMStream)
 	$Options.visible = true
 
 var alreadyEntered = false
@@ -23,7 +22,8 @@ func changeSel(fuck):
 			optionSprs[i].play(optionSprs[i].name+' basic')
 func goTo():
 	match (optionSprs[curSel].name):
-		
+		'story_mode':
+			Globals.switchTo('StoryMenu')
 		'freeplay':
 			Globals.switchTo('FreeplayState')
 		'options':

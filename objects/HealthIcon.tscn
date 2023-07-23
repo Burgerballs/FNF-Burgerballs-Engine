@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://cbdq318l4saku" path="res://assets/images/characters/bf/icon.png" id="1_pg4xs"]
 
-[sub_resource type="Animation" id="Animation_2h0p0"]
-resource_name = "kill"
+[sub_resource type="Animation" id="Animation_ud4lq"]
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -17,8 +17,8 @@ tracks/0/keys = {
 "values": [1]
 }
 
-[sub_resource type="Animation" id="Animation_ud4lq"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_2h0p0"]
+resource_name = "kill"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true

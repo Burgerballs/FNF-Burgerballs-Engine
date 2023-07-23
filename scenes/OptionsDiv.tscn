@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://dd7n3wruwrjwr"]
+
+[ext_resource type="Script" path="res://scenes/OptionsDiv.gd" id="1_eycpv"]
+[ext_resource type="FontFile" uid="uid://cmisj8l6ni57l" path="res://assets/fonts/vcr.ttf" id="1_qo4rt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5oijk"]
+bg_color = Color(1, 1, 1, 0.6)
+
+[sub_resource type="LabelSettings" id="LabelSettings_y1se7"]
+font = ExtResource("1_qo4rt")
+font_size = 14
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="OptionsDiv" type="Panel"]
+offset_right = 180.0
+offset_bottom = 16.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_5oijk")
+script = ExtResource("1_eycpv")
+
+[node name="Div" type="Label" parent="."]
+layout_mode = 0
+offset_right = 180.0
+offset_bottom = 16.0
+text = "DIVIDER NAME"
+label_settings = SubResource("LabelSettings_y1se7")
+horizontal_alignment = 1
+
+[node name="Line2D" type="Line2D" parent="."]
+position = Vector2(0, 17)
+points = PackedVector2Array(181, 0, -1, 0)
+width = 2.0
+default_color = Color(1, 1, 1, 0.6)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2

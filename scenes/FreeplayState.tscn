@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://be8le8cgxsrqv"]
+[gd_scene load_steps=15 format=3 uid="uid://be8le8cgxsrqv"]
 
 [ext_resource type="Texture2D" uid="uid://bjdl0w4j5bowb" path="res://assets/images/menus/menuDesat.png" id="1_7hqd5"]
 [ext_resource type="Script" path="res://scenes/FreeplayState.gd" id="1_j0mgs"]
@@ -6,6 +6,7 @@
 [ext_resource type="Theme" uid="uid://b3l5cf3mqtujs" path="res://assets/opacityblack.tres" id="3_oh2i0"]
 [ext_resource type="Texture2D" uid="uid://cv3fupxsgm734" path="res://assets/weeks/week1/week.png" id="4_v8le5"]
 [ext_resource type="PackedScene" uid="uid://bgilym2qsrs4y" path="res://scenes/fonts/Alphabet.tscn" id="6_crtpq"]
+[ext_resource type="PackedScene" uid="uid://dtphqnciycfkq" path="res://objects/song_prev.tscn" id="6_tycbr"]
 [ext_resource type="PackedScene" uid="uid://c4b1hqv1lfaxu" path="res://objects/HealthIcon.tscn" id="7_i0l2o"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ppb4u"]
@@ -21,7 +22,7 @@ bg_color = Color(0, 0, 0, 0.6)
 
 [sub_resource type="LabelSettings" id="LabelSettings_fd7i1"]
 font = ExtResource("2_yvggr")
-font_size = 15
+font_size = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ssl00"]
 bg_color = Color(0, 0, 0, 0.6)
@@ -79,6 +80,12 @@ label_settings = SubResource("LabelSettings_fd7i1")
 horizontal_alignment = 1
 autowrap_mode = 2
 
+[node name="SongPrev" parent="." instance=ExtResource("6_tycbr")]
+offset_left = 989.0
+offset_top = 129.0
+offset_right = 1274.0
+offset_bottom = 717.0
+
 [node name="SongInfo" type="Panel" parent="."]
 offset_left = 990.0
 offset_top = 46.0
@@ -118,3 +125,23 @@ visible = false
 position = Vector2(76, -94)
 
 [node name="CanvasLayer3" type="CanvasLayer" parent="."]
+
+[node name="Prompt" type="Panel" parent="CanvasLayer3"]
+offset_left = 5.0
+offset_top = 703.0
+offset_right = 985.0
+offset_bottom = 715.0
+theme = ExtResource("3_oh2i0")
+theme_override_styles/panel = SubResource("StyleBoxFlat_84n1j")
+
+[node name="Label" type="Label" parent="CanvasLayer3/Prompt"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "TAB TO ENTER OPTIONS | PRESS Q TO PREVIEW SONG"
+label_settings = SubResource("LabelSettings_fd7i1")
+vertical_alignment = 1
+autowrap_mode = 2

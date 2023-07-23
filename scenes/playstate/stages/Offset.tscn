@@ -1,0 +1,98 @@
+[gd_scene load_steps=7 format=3 uid="uid://kssg66eexydo"]
+
+[ext_resource type="Script" path="res://scenes/playstate/stages/offset/Offset.gd" id="1_uevyk"]
+[ext_resource type="Shader" uid="uid://be1bj0ge0c3gq" path="res://scenes/playstate/stages/offset/Offset.tres" id="2_mmsy1"]
+[ext_resource type="FontFile" uid="uid://cmisj8l6ni57l" path="res://assets/fonts/vcr.ttf" id="3_gsqh8"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_xpt1g"]
+font = ExtResource("3_gsqh8")
+font_size = 164
+shadow_size = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pijdq"]
+shader = ExtResource("2_mmsy1")
+
+[sub_resource type="LabelSettings" id="LabelSettings_f8ew1"]
+font = ExtResource("3_gsqh8")
+font_size = 58
+
+[node name="Stage" type="Node2D" node_paths=PackedStringArray("bfPos", "dadPos", "gfPos")]
+script = ExtResource("1_uevyk")
+bfPos = NodePath("BF")
+dadPos = NodePath("DAD")
+gfPos = NodePath("GF")
+defaultCamZoom = 0.8
+
+[node name="BF" type="Node2D" parent="."]
+z_index = 3
+position = Vector2(770, 100)
+
+[node name="DAD" type="Node2D" parent="."]
+z_index = 3
+position = Vector2(100, 100)
+
+[node name="GF" type="Node2D" parent="."]
+z_index = 3
+position = Vector2(400, 130)
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0, 0)
+
+[node name="Label" type="Label" parent="ParallaxBackground/ParallaxLayer4"]
+offset_left = 7.0
+offset_top = 212.0
+offset_right = 1287.0
+offset_bottom = 360.0
+text = "0ms"
+label_settings = SubResource("LabelSettings_xpt1g")
+horizontal_alignment = 1
+vertical_alignment = 3
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.7, 0.7)
+
+[node name="ColorRect" type="ColorRect" parent="ParallaxBackground/ParallaxLayer2"]
+offset_left = -1017.0
+offset_top = 631.0
+offset_right = 2166.0
+offset_bottom = 652.0
+color = Color(0.466667, 0.466667, 0.466667, 1)
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.9, 0.9)
+
+[node name="ColorRect" type="ColorRect" parent="ParallaxBackground/ParallaxLayer"]
+offset_left = -1017.0
+offset_top = 641.0
+offset_right = 2166.0
+offset_bottom = 662.0
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground"]
+skew = 0.507891
+motion_scale = Vector2(0.8, 0.8)
+
+[node name="Label" type="Label" parent="ParallaxBackground/ParallaxLayer3"]
+material = SubResource("ShaderMaterial_pijdq")
+offset_left = -173.083
+offset_top = 766.79
+offset_right = 2478.92
+offset_bottom = 1036.79
+text = "OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+OFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSETOFFSET
+"
+label_settings = SubResource("LabelSettings_f8ew1")

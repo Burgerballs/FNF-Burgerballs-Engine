@@ -1,0 +1,100 @@
+[gd_scene load_steps=10 format=3 uid="uid://cs8p78utulso8"]
+
+[ext_resource type="Script" path="res://scenes/StoryMenu.gd" id="1_atjf8"]
+[ext_resource type="FontFile" uid="uid://cmisj8l6ni57l" path="res://assets/fonts/vcr.ttf" id="1_ogwis"]
+[ext_resource type="Texture2D" uid="uid://d0s4nqmip2nho" path="res://assets/images/Menu_Tracks.png" id="1_vd5tr"]
+[ext_resource type="SpriteFrames" path="res://assets/images/campaign_menu_UI_assets.res" id="3_a6tq3"]
+[ext_resource type="Texture2D" uid="uid://cdta8d81rwfye" path="res://assets/images/difficulties/hard.png" id="4_vmyhd"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_mnlhy"]
+font = ExtResource("1_ogwis")
+font_size = 32
+font_color = Color(0.898039, 0.341176, 0.466667, 1)
+
+[sub_resource type="Gradient" id="Gradient_iu7wo"]
+colors = PackedColorArray(0.976471, 0.811765, 0.317647, 1, 0.976471, 0.811765, 0.317647, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_scoq3"]
+gradient = SubResource("Gradient_iu7wo")
+width = 1280
+
+[sub_resource type="LabelSettings" id="LabelSettings_iikd1"]
+font = ExtResource("1_ogwis")
+font_size = 32
+
+[node name="StoryMenu" type="Node2D"]
+script = ExtResource("1_atjf8")
+
+[node name="BACKGROUND" type="ColorRect" parent="."]
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 1)
+
+[node name="MenuTracks" type="Sprite2D" parent="BACKGROUND"]
+position = Vector2(89.6, 481)
+texture = ExtResource("1_vd5tr")
+centered = false
+
+[node name="Label" type="Label" parent="BACKGROUND/MenuTracks"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 60.0
+offset_right = 20.0
+offset_bottom = 83.0
+grow_horizontal = 2
+text = "CAN CANDLEWAX
+BE USED AS A
+GUN SILENCER"
+label_settings = SubResource("LabelSettings_mnlhy")
+horizontal_alignment = 1
+
+[node name="difficultySelector" type="Node2D" parent="BACKGROUND"]
+
+[node name="left" type="AnimatedSprite2D" parent="BACKGROUND/difficultySelector"]
+position = Vector2(884, 483.5)
+sprite_frames = ExtResource("3_a6tq3")
+animation = &"arrow left"
+
+[node name="right" type="AnimatedSprite2D" parent="BACKGROUND/difficultySelector"]
+position = Vector2(1250, 483.5)
+sprite_frames = ExtResource("3_a6tq3")
+animation = &"arrow left"
+flip_h = true
+
+[node name="difficulty" type="Sprite2D" parent="BACKGROUND/difficultySelector"]
+position = Vector2(1067, 492)
+texture = ExtResource("4_vmyhd")
+
+[node name="weeks" type="Node2D" parent="BACKGROUND"]
+
+[node name="ColorRect2" type="Sprite2D" parent="."]
+position = Vector2(640, 223)
+scale = Vector2(1, 386)
+texture = SubResource("GradientTexture1D_scoq3")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1280.0
+offset_bottom = 30.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="ColorRect"]
+layout_mode = 0
+offset_left = 10.0
+offset_right = 295.0
+offset_bottom = 32.0
+text = "SCORE: 49324858"
+label_settings = SubResource("LabelSettings_iikd1")
+
+[node name="Label2" type="Label" parent="ColorRect"]
+modulate = Color(1, 1, 1, 0.7)
+layout_mode = 0
+offset_left = 414.0
+offset_right = 1280.0
+offset_bottom = 32.0
+text = "THIS WEEK IS SPONSORED BY MY ASS!!!"
+label_settings = SubResource("LabelSettings_iikd1")
+horizontal_alignment = 2
+
+[node name="Chars" type="CanvasLayer" parent="."]

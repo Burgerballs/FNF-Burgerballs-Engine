@@ -20,11 +20,12 @@ var player_2:String
 var player_1:String
 var needsVoices:bool = true
 var diff = 'NORMAl'
+var stage = 'stage'
 
 func parse_chart(song,diff):
 	var filePath = "res://assets/songs/"+song+'/'+song
 	var eventsPath = "res://assets/songs/"+song+'/events.json'
-	if diff != 'NORMAL':
+	if diff.to_upper() != 'NORMAL':
 		filePath += '-' + diff.to_lower() + '.json'
 	else:
 		filePath += '.json'
@@ -40,6 +41,8 @@ func parse_chart(song,diff):
 	speed = content['speed']
 	player_2 = content['player2']
 	player_1 = content['player1']
+	if content.has('stage'):
+		stage = content['stage']
 	if content.has('events'):
 		for event in content["events"]:
 			for i in event[1].size():

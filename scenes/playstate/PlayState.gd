@@ -6,6 +6,7 @@ extends Node2D
 @onready var Voices = $VoiceStream
 @onready var noteGroup = $"CamHUD/NoteGroup"
 @onready var SongProgress = $"CamHUD/TimeDisplay/SongProgress"
+@onready var HealthBar = $"CamHUD/HealthBar/HealthBarBar (lol)"
 @onready var boyfriend = $"BF"
 @onready var dad = $"DAD"
 @onready var gf = $"GF"
@@ -18,6 +19,7 @@ var curSong:String
 var camFollow:Vector2
 var defaultCamZoom = 1.0
 var camZooming = true
+var songNoteData:Array
 class Rating extends Node2D:
 	var accWorth = 1.0
 	var accNeed = 45.0
@@ -58,11 +60,17 @@ var ratingList = [
 var isCurSecBF:bool = false
 var startedSong = false
 var stages = {
-	"Default" = 'res://scenes/playstate/stages/Default.tscn'
+	"stage" = preload('res://scenes/playstate/stages/Default.tscn'),
+	'offset' = preload('res://scenes/playstate/stages/Offset.tscn')
 }
 var Stage
 var events
 var pauseMenu = preload("res://scenes/playstate/PauseMenu.tscn")
+var gameOver = preload("res://scenes/playstate/GameOverScreen.tscn")
+
+signal noteHit(note:Note)
+signal songEnd()
+
 func _ready():
 	Conductor.songPos = 0
 	Conductor.songPos -= Conductor.crotchet*5
@@ -71,7 +79,7 @@ func _ready():
 	Conductor.bpm = SONG.bpm
 	Conductor.connect("beatHit", beatHit)
 	generateSong()
-	Stage = findStage(curSong).instantiate()
+	Stage = findStage(SONG.stage).instantiate()
 	add_child(Stage)
 	defaultCamZoom = Stage.defaultCamZoom
 	Stage.z_index = -3
@@ -95,13 +103,19 @@ func _ready():
 	Inst.connect('finished', endSong)
 	funnyAss(dadStrums)
 	funnyAss(playerStrums)
+	playerStrums.position.x = 470 if Preferences.getPreference('middlescroll') else 800
+	$"CamHUD/TimeDisplay".position.x+=350 if Preferences.getPreference('middlescroll') else 0
+	dadStrums.scale = Vector2(0.5,0.5) if Preferences.getPreference('middlescroll') else Vector2.ONE
 func endSong():
+	songEnd.emit()
 	Highscore.saveHighscore(Globals.curSong, Globals.curDiff, score, snapped(accuracy*100, 0.1))
-	Globals.switchTo('mainmenu/MainMenuState')
+	Globals.fromPlaystate()
 func findStage(a):
 	match a:
+		'offset':
+			return stages['offset']
 		_:
-			return load(stages['Default'])
+			return stages['stage']
 func doThing(c):
 	match c:
 		_:
@@ -153,27 +167,43 @@ func doCountDown():
 			countDownTimer.stop()
 			startSong()
 	)
+	
+func songSpdChange():
+	Inst.pitch_scale = Preferences.getPreference('songspd')
+	Voices.pitch_scale = Preferences.getPreference('songspd')
 func startSong():
 	Conductor.playMusic('songs/' + str(curSong).to_lower().replace(' ', '-') + '/Inst', Inst)
 	if SONG.needsVoices:
 		Conductor.playMusic('songs/' + str(curSong).to_lower().replace(' ', '-') + '/Voices', Voices)
 	Conductor.linkStream(Inst)
 	startedSong = true
+	songSpdChange()
 	var tween1 = create_tween()
 	tween1.tween_property($'CamHUD/TimeDisplay', "modulate", Color.WHITE, Conductor.crotchet/1000)
+	Globals.creditShow(curSong.to_lower().replace(' ', '-'))
 	
 func funnyAss(ssdsdsddsds):
 	var tween1 = create_tween()
 	tween1.tween_property(ssdsdsddsds, "modulate", Color.WHITE, Conductor.crotchet/1000)
 var camSpeed = 1
+func scoreString():
+	var ret = ''
+	match(Preferences.getPreference('SDT')):
+		'Standard':
+			if !(totalLooseHits == 0):
+				var curRating = findRating(accuracy*100)
+				ret = 'Score: ' + str(int(score)) + ' // Accuracy: ' + str(snapped(accuracy*100, 0.1)) + '% ['+curRating+'] // Combo Breaks: ' + str(misses)
+			else:
+				ret = 'Score: ' + str(int(score))  + ' // Combo Breaks: ' + str(misses)
+		'Simplified':
+			ret = 'Score: ' + str(int(score)) + " // Combo Breaks: " + str(misses)
+		'Score Only':
+			ret = 'Score: ' + str(int(score))
+	return ret
 @onready var Icons = $"CamHUD/HealthBar/Icons"
 func _process(delta):
 	accuracy = (totalLooseHits / totalHitNotes)
-	if !(totalLooseHits == 0):
-		var curRating = findRating(accuracy*100)
-		$"CamHUD/ScoreTxt".text = 'Score: ' + str(int(score)) + ' // Accuracy: ' + str(snapped(accuracy*100, 0.1)) + '% ['+curRating+'] // Combo Breaks: ' + str(misses)
-	else:
-		$"CamHUD/ScoreTxt".text = 'Score: ' + str(int(score))  + ' // Combo Breaks: ' + str(misses)
+	$"CamHUD/ScoreTxt".text = scoreString()
 	
 	if health > 2.02:
 		health = 2
@@ -181,9 +211,9 @@ func _process(delta):
 		kill()
 		health = 0
 		
-	Icons.position.x = (-health+2) * ($"CamHUD/HealthBar/HealthBarBar (lol)".size.x / 2) + $"CamHUD/HealthBar/HealthBarBar (lol)".position.x
+	Icons.position.x = (-health+2) * (HealthBar.size.x / 2) + HealthBar.position.x
 	
-	$"CamHUD/HealthBar/HealthBarBar (lol)".value = -health + 2
+	HealthBar.value = -health + 2
 	
 	if (-health+2)*50 <= 20:
 		Icons.find_child("BFIcon").find_child("AnimationPlayer").play('live')
@@ -201,7 +231,7 @@ func _process(delta):
 			miss(note)
 	if startedSong:
 		for i in events.size():
-			if events[i].strumTime <= Conductor.songPos && events[i].active:
+			if events[i].strumTime <= Conductor.songPos + Preferences.getPreference('offset') + AudioServer.get_output_latency() && events[i].active:
 				doEvent(events[i].eventName,events[i].param1,events[i].param2)
 				events[i].active = false
 		if not floor(Conductor.curStep/16) >= SONG.notes.size():
@@ -212,15 +242,12 @@ func _process(delta):
 	else:
 		Conductor.songPos += delta*1000
 		isCurSecBF = SONG.notes[0].mustHitSection
-	var lerpVal:float = CoolUtil.boundTo(delta * 2.4 * camSpeed, 0, 1)
-	if camZooming:
-		$Camera2D.zoom = lerp($Camera2D.zoom, Vector2(defaultCamZoom,defaultCamZoom), lerpVal)
-		$CamHUD.scale = lerp($CamHUD.scale, Vector2.ONE, lerpVal)
-	$Camera2D.position = Vector2(lerp($Camera2D.position.x, camFollow.x, lerpVal), lerp($Camera2D.position.y, camFollow.y, lerpVal))
 	moveCam()
 	positionHud()
-	if Input.is_action_just_pressed('ui_accept'):
+	if Input.is_action_just_pressed('uienter'):
 		pause()
+	if Input.is_action_just_pressed('reset'):
+		kill()
 func doEvent(ename,p1,p2):
 	match ename:
 		'Hey!':
@@ -249,8 +276,10 @@ func moveCam():
 		camFollow = dad.position + Vector2(150,-100) + dad.get_midpoint() + dad.cameraPos
 	
 func kill():
-	print('KILL HIMMMM')
-	pass
+	BunchoFucko.deathCharPos = boyfriend.position
+	BunchoFucko.deathCameraPos = $Camera2D.position
+	BunchoFucko.deathZoom = $Camera2D.zoom
+	get_tree().change_scene_to_packed(gameOver)
 
 func findRating(acc):
 	for i in ratingList.size():
@@ -258,8 +287,8 @@ func findRating(acc):
 			return ratingList[i][0]
 			break
 func convertToTimeString(time):
-	var minutes = floor(time / 60)
-	var seconds = int(time) % 60
+	var minutes = floor(time / 60 / Preferences.getPreference('songspd'))
+	var seconds = int(time / Preferences.getPreference('songspd')) % 60
 	if seconds > 9:
 		return str(minutes) + ':' + str(seconds)
 	else:
@@ -269,7 +298,7 @@ func miss(note):
 	misses = misses + 1 # it is always doubling for some reason
 	note.queue_free()
 	totalHitNotes += 1
-	score -= 150 + (150*(note.holdLength / Conductor.stepCrotchet)) 
+	score -= 150 + (150*(note.holdLength / Conductor.stepCrotchet)) * Preferences.get_modifier_mult()
 	health -= 0.04
 	Voices.volume_db = -60
 	if combo != 0:
@@ -282,15 +311,15 @@ func playDirectionAnim(noteData, suffix, char):
 		char._playAnim('sing' + dirNames[noteData] + suffix)
 	else:
 		char._playAnim('sing' + dirNames[noteData])
-func generateSong():
-	speed = SONG.speed * Preferences.getPreference('scrollspd')
-	for sec in SONG.notes:
+		
+func processNotes():
+	for notes in songNoteData:
 		var prevNote:Note
-		for notes in sec.notes:
-			if sec.notes.find(notes) == 0 && SONG.notes.find(sec) == 0:
+		if notes.StrumTime > Conductor.songPos + (2500/(speed)):
+			if songNoteData.find(notes) == 0:
 				prevNote = null
 			var NoteDir = notes.NoteDir
-			var StrumTime = notes.StrumTime + Preferences.getPreference('offset')
+			var StrumTime = notes.StrumTime + Preferences.getPreference('offset') + AudioServer.get_output_latency()
 			var PlayedByBf = notes.playedByBf
 			var suslength = notes.susLength
 			var newNote:Note = Note.new(StrumTime,NoteDir,PlayedByBf)
@@ -305,8 +334,26 @@ func generateSong():
 			newNote.reloadSprites()
 			noteGroup.add_child(newNote)
 			prevNote = newNote
+			songNoteData.erase(notes)
+func cameraMove(d):
+	var lerpVal:float = CoolUtil.boundTo(d * 2.4 * camSpeed, 0, 1)
+	if camZooming:
+		$Camera2D.zoom = lerp($Camera2D.zoom, Vector2(defaultCamZoom,defaultCamZoom), lerpVal)
+		$CamHUD.scale = lerp($CamHUD.scale, Vector2.ONE, lerpVal)
+	$Camera2D.position = Vector2(lerp($Camera2D.position.x, camFollow.x, lerpVal), lerp($Camera2D.position.y, camFollow.y, lerpVal))
+func _physics_process(delta):
+	call_deferred_thread_group('processNotes')
+	call_deferred_thread_group('cameraMove', delta)
+
+func generateSong():
+	speed = SONG.speed * Preferences.getPreference('scrollspd') / Preferences.getPreference('songspd')
+	for sec in SONG.notes:
+		var prevNote:Note
+		for notes in sec.notes:
+			songNoteData.append(notes)
 		curSong = SONG.songName
 		$"CamHUD/TimeDisplay/SongDisplay".text = SONG.songName.to_upper() + '\n[' + difficulty.to_upper() + ']'
+		$"CamHUD/ScoreTxt/Label".text = str(Preferences.getPreference('songspd'))+'x Speed / '+str(Preferences.getPreference('msdmg'))+'x Miss Damage / '+str(Preferences.getPreference('hthp'))+'x Note Hit Health / '+str(Preferences.get_modifier_mult())+'x Score Multiplier'
 
 var camBumping = false
 func beatHit(cr):
@@ -335,7 +382,8 @@ func opponentNote(note):
 	pass
 func goodNoteHit(note):
 	if !note.wasGoodHit:
-		var diff = absf(Conductor.songPos - note.pos)
+		var diff = absf(Conductor.songPos - note.pos) / Preferences.getPreference('songspd')
+		noteHit.emit(note)
 		totalHitNotes += 1.0
 		$"CamHUD/ScoreTxt".find_child("AnimationPlayer").stop()
 		$"CamHUD/ScoreTxt".find_child("AnimationPlayer").play('boing')
@@ -351,7 +399,7 @@ func resolveRatings(diff):
 	for i in judgements:
 		if i.accNeed >= diff:
 			totalLooseHits += i.accWorth
-			score += i.scoreGiven
+			score += i.scoreGiven * Preferences.get_modifier_mult()
 			dispCombo(i, diff)
 			break
 			

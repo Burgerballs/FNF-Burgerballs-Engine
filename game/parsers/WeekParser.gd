@@ -7,6 +7,7 @@ class Week:
 	var weekCharacters:Array
 	var weekBefore:String
 	var difficulties:String
+	var hiddenWeek:bool = true
 
 var loadedWeeks:Dictionary
 var weekList:Array[String]
@@ -18,6 +19,8 @@ func burgerBITCH():
 		var file = FileAccess.open(weekdir + i + '/week.json', FileAccess.READ)
 		var content = JSON.parse_string(file.get_as_text())
 		week.songs = content['songs']
+		week.weekCharacters = content['weekCharacters']
 		week.weekBefore = content['weekBefore']
+		week.hiddenWeek = content['hideStoryMode']
 		weekList.append(i)
 		loadedWeeks.merge({i: week})

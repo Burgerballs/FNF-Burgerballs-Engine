@@ -51,8 +51,10 @@ var cameraPos:Vector2
 var charFrames:SpriteFrames
 var charAnimFrames:SpriteFrames
 var singDuration = 4.0
-func _loadChar(charName = 'bf', isBf = false):
+var isDead = false
+func _loadChar(charName = 'bf', isBf = false,isDead=false):
 	self.charName = charName
+	self.isDead = isDead
 	charData = CharacterData.new(charName)
 	self.isBf = isBf
 	centered = false
@@ -77,7 +79,10 @@ func _loadChar(charName = 'bf', isBf = false):
 	else:
 		cameraPos = !charData.camOffset
 	singDuration = charData.singDuration
-	_dance()
+	if !isDead:
+		_dance()
+	else:
+		_playAnim('firstDeath')
 	connect("animation_finished", _animFinished)
 func get_midpoint():
 	if findAnim('idle'):
@@ -135,9 +140,13 @@ func _playAnim(animName, forced = false):
 	else:
 		set_offset(offsets)
 func _animFinished():
-	if (curAnim != 'idle') && not curAnim.begins_with('dance') or (!isBf && not curAnim.begins_with('sing')&&(curAnim != 'idle') && not curAnim.begins_with('dance')):
-		if !findAnim('idle'):
-			_playAnim('dance' + ('Left' if !danced else 'Right'))
-			danced = !danced
-		else:
-			_playAnim('idle')
+	if !(isBf && isDead):
+		if (curAnim != 'idle') && not curAnim.begins_with('dance') or (!isBf && not curAnim.begins_with('sing')&&(curAnim != 'idle') && not curAnim.begins_with('dance')):
+			if !findAnim('idle'):
+				_playAnim('dance' + ('Left' if !danced else 'Right'))
+				danced = !danced
+			else:
+				_playAnim('idle')
+	else:
+		if (curAnim == 'firstDeath'):
+			_playAnim('deathLoop')

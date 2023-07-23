@@ -22,9 +22,10 @@ var curDiff = 1
 var optionsState = preload("res://scenes/OptionsMenu.tscn")
 var songCheck:Song
 var scoreDictionary = {
-	"score":0,
+	"score":10000,
 	"accuracy":100
 }
+@onready var songPrev = $SongPrev
 func _ready():
 	weekpars.burgerBITCH()
 	addSongsToList()
@@ -50,13 +51,19 @@ func _process(delta):
 		changeDiff(-1)
 	elif Input.is_action_just_pressed('uiright'):
 		changeDiff(1)
-	elif Input.is_action_just_pressed('ui_accept'):
+	elif Input.is_action_just_pressed('uienter'):
+		Globals.fromWhere = 'freeplay'
 		Globals.play_song(songList[curSel].songName.to_lower().replace(' ', '-'),diffList[curDiff])
+	elif Input.is_action_just_pressed('uiback'):
+		Globals.switchTo('mainmenu/MainMenuState')
 	elif Input.is_key_pressed(KEY_TAB):
 		var OptionsThing = optionsState.instantiate()
 		OptionsThing.isNotMenu = true
 		OptionsThing.thing = false
 		$CanvasLayer3.add_child(OptionsThing)
+	elif Input.is_key_pressed(KEY_Q):
+		songPrev.SONG = songCheck
+		songPrev.generateSong()
 	for i in IconLayer.get_children().size():
 		IconLayer.get_child(i).position.x = AlphabetLayer.get_child(i).position.x + AlphabetLayer.get_child(i).size.x + 60
 		IconLayer.get_child(i).position.y = AlphabetLayer.get_child(i).position.y + (AlphabetLayer.get_child(i).size.y / 2)

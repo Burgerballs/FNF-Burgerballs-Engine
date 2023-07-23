@@ -11,6 +11,7 @@ var canBeHit = false;
 var wasGoodHit = false;
 var holdLength:float = 0.0
 var game
+var isOnGame:bool = true
 var char
 var noteSkins = {
 	"Default" = preload('res://objects/noteShit/NoteSkins/Basic.tscn').instantiate()
@@ -21,6 +22,7 @@ var susRect:ColorRect
 var susLine:Line2D
 var susEnd:AnimatedSprite2D
 var hasHold:bool = false
+var holdTimer:float = 0
 func _init(strumTime, noteData, mustHitt):
 	pos = strumTime
 	dir = noteData
@@ -32,7 +34,8 @@ func _init(strumTime, noteData, mustHitt):
 	susLine = susRect.find_child('susLine')
 	susEnd = susRect.find_child('susEnd')
 	position.y = 2000
-	
+var thisStrum
+var downscrollMult = -1
 func reloadSprites():
 	sprite.play(dirNames[dir]) 
 	if holdLength >= Conductor.stepCrotchet/8:
@@ -48,37 +51,40 @@ func reloadSprites():
 		susRect.visible = false
 		susLine.visible = false
 		susEnd.visible = false
-		
-var downscrollMult = -1
-func _process(d):
+	thisStrum = strumLine.get_child(dir)
 	downscrollMult = (1 if !Preferences.getPreference('downscroll') else -1)
+		
+func _process(d):
 	if mustHit:
-		canBeHit = (absf(Conductor.songPos - pos) <= (Conductor.safeZoneOffset))
-		tooLate = (pos < Conductor.songPos - Conductor.safeZoneOffset && !wasGoodHit)
+		canBeHit = (absf(Conductor.songPos - pos) <= (Conductor.safeZoneOffset * Preferences.getPreference('songspd')))
+		tooLate = (pos < Conductor.songPos - (Conductor.safeZoneOffset * Preferences.getPreference('songspd')) && !wasGoodHit)
 	else:
 		canBeHit = false
 		wasGoodHit = (pos < Conductor.songPos + (Conductor.safeZoneOffset/8))
 	var scrollSpeed = game.speed
-	if tooLate:
+	if tooLate && isOnGame:
 		modulate.a = 0.3
 	if wasGoodHit:
 		sprite.visible = false
-		strumLine.get_child(dir).playAnim("confirm")
-		holdLength -= (d * (Conductor.stepCrotchet*10))
-		game.Voices.volume_db = 0
-		game.playDirectionAnim(dir, '', char)
-		if holdLength <= 10:
-			if not mustHit:
+		if mustHit or 	(!mustHit && Preferences.getPreference('oppglow')):
+			strumLine.get_child(dir).playAnim("confirm")
+		holdTimer+=(d*1000)*Preferences.getPreference('songspd')
+		var holdTimerDiff = holdLength - (holdTimer)
+		if isOnGame:
+			game.Voices.volume_db = 0
+			game.playDirectionAnim(dir, '', char)
+		if holdTimerDiff <= Conductor.stepCrotchet:
+			if not mustHit && isOnGame:
 				game.opponentNote(self)
 			queue_free()
-		elif holdLength > 10 && mustHit:
+		elif holdTimerDiff > Conductor.stepCrotchet && mustHit && isOnGame:
 			game.score += int(3000 / float(d*10000))
-		if mustHit && holdLength >= 80.0 and !Input.is_action_pressed(strumLine.controls[dir]):
+		if mustHit && holdTimerDiff >= 100.0 and !Input.is_action_pressed(strumLine.controls[dir]) && isOnGame:
 			game.miss(self)
 		
 	if game != null && hasHold:
 		var lastpoint = susLine.points.size() - 1
-		var endPoint = ((((holdLength / 2.5) * scrollSpeed) / scale.y) * downscrollMult)
+		var endPoint = (((holdLength/2.5)*(scrollSpeed)*scale.y))* downscrollMult
 		susLine.points[lastpoint].y = endPoint
 		susEnd.position.y = susLine.position.y + endPoint + (((susLine.texture.get_height() * 0.7) - 4) * downscrollMult)
 		susEnd.flip_v = downscrollMult < 0
@@ -91,5 +97,3 @@ func _process(d):
 		
 func swap(vec2array):
 	return [vec2array[vec2array.size() - 1], vec2array[0]]
-func _kill():
-	self.queue_free()
